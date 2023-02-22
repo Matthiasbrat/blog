@@ -13,7 +13,7 @@ menu:
             icon: user
 ---
 
-I started this blog to get a trace of my work, discoveries and more about my journey in programming. Also I want to share music and global things about my life and how I see my future in life.
+I started this blog to get a trace of my work, discoveries and more about my journey in programming. Also I want to share music, pictures and global things about my life and how I see my future in life.
 
 I got this template idea from Macawls, which is an awsome dude, you should definitely check his work and his own blog:
 
