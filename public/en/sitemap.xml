@@ -28,6 +28,22 @@
                 href="https://matthiasbrat.dev/about/"
                 />
   </url><url>
+    <loc>https://matthiasbrat.dev/p/first-post/</loc>
+    <lastmod>2023-02-22T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://matthiasbrat.dev/fr/p/premier-poste/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://matthiasbrat.dev/p/first-post/"
+                />
+  </url><url>
+    <loc>https://matthiasbrat.dev/tags/other/</loc>
+    <lastmod>2023-02-22T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://matthiasbrat.dev/page/</loc>
     <lastmod>2023-02-22T00:00:00+00:00</lastmod>
     <xhtml:link
@@ -41,43 +57,8 @@
                 href="https://matthiasbrat.dev/page/"
                 />
   </url><url>
-    <loc>https://matthiasbrat.dev/tags/about/</loc>
-    <lastmod>2023-02-16T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://matthiasbrat.dev/p/about/</loc>
-    <lastmod>2023-02-16T00:00:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://matthiasbrat.dev/fr/p/%C3%A0-propos/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://matthiasbrat.dev/p/about/"
-                />
-  </url><url>
-    <loc>https://matthiasbrat.dev/categories/</loc>
-    <lastmod>2023-02-16T00:00:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="fr"
-                href="https://matthiasbrat.dev/fr/categories/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://matthiasbrat.dev/categories/"
-                />
-  </url><url>
-    <loc>https://matthiasbrat.dev/tags/me/</loc>
-    <lastmod>2023-02-16T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://matthiasbrat.dev/categories/me/</loc>
-    <lastmod>2023-02-16T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://matthiasbrat.dev/post/</loc>
-    <lastmod>2023-02-16T00:00:00+00:00</lastmod>
+    <lastmod>2023-02-22T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="fr"
@@ -90,7 +71,7 @@
                 />
   </url><url>
     <loc>https://matthiasbrat.dev/tags/</loc>
-    <lastmod>2023-02-16T00:00:00+00:00</lastmod>
+    <lastmod>2023-02-22T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="fr"
@@ -113,6 +94,18 @@
                 rel="alternate"
                 hreflang="en"
                 href="https://matthiasbrat.dev/archives/"
+                />
+  </url><url>
+    <loc>https://matthiasbrat.dev/categories/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="fr"
+                href="https://matthiasbrat.dev/fr/categories/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://matthiasbrat.dev/categories/"
                 />
   </url><url>
     <loc>https://matthiasbrat.dev/categories/test/</loc>
