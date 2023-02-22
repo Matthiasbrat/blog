@@ -1,26 +1,15 @@
-baseurl: https://matthiasbrat.dev
+baseurl: https://matthiasbrat.dev/blog
 languageCode: en-us
 theme: hugo-theme-stack
 paginate: 5
-title: Example Site
+title: blog
 
 languages:
     en:
         languageName: English
-        title: Example Site
+        title: Kumo's blog
         description: Example description
         weight: 1
-    zh-cn:
-        languageName: 中文
-        title: 演示站点
-        description: 演示说明
-        weight: 2
-    ar:
-        languageName: عربي
-        languagedirection: rtl
-        title: موقع تجريبي
-        description: وصف تجريبي
-        weight: 3
 
 # Change it to your Disqus shortname before using
 disqusShortname: hugo-theme-stack
@@ -42,13 +31,13 @@ permalinks:
 
 params:
     mainSections:
-        - post
+        - page
     featuredImageField: image
     rssFullContent: true
-    favicon:  # e.g.: favicon placed in `static/favicon.ico` of your site folder, then set this field to `/favicon.ico` (`/` is necessary)
+    favicon: ./favicon.ico # e.g.: favicon placed in `static/favicon.ico` of your site folder, then set this field to `/favicon.ico` (`/` is necessary)
 
     footer:
-        since: 2020
+        since: ""
         customText:
 
     dateFormat:
@@ -56,24 +45,24 @@ params:
         lastUpdated: Jan 02, 2006 15:04 MST
 
     sidebar:
-        emoji: 🍥
-        subtitle: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        emoji: 🧡
+        subtitle: ""
         avatar:
             enabled: true
             local: true
-            src: img/avatar.png
+            src: img/profile.png
 
     article:
-        math: false
+        math: true
         toc: true
         readingTime: true
         license:
-            enabled: true
+            enabled: false
             default: Licensed under CC BY-NC-SA 4.0
 
     comments:
         enabled: true
-        provider: disqus
+        provider: utterances
 
         disqusjs:
             shortname:
@@ -83,9 +72,9 @@ params:
             adminLabel:
 
         utterances:
-            repo:
+            repo: Matthiasbrat/blog
             issueTerm: pathname
-            label:
+            label: Comment 💬
 
         remark42:
             host:
@@ -159,14 +148,14 @@ params:
                   limit: 10
             - type: tag-cloud
               params:
-                  limit: 10
+                  limit: 20
         page:
             - type: toc
 
     opengraph:
         twitter:
             # Your Twitter username
-            site:
+            site: idk
 
             # Available values: summary, summary_large_image
             card: summary_large_image
@@ -182,7 +171,7 @@ params:
         toggle: true
 
         # Available values: auto, light, dark
-        default: auto
+        default: dark
 
     imageProcessing:
         cover:
@@ -199,15 +188,9 @@ menu:
     social:
         - identifier: github
           name: GitHub
-          url: https://github.com/CaiJimmy/hugo-theme-stack
+          url: https://github.com/Matthiasbrat
           params:
               icon: brand-github
-
-        - identifier: twitter
-          name: Twitter
-          url: https://twitter.com
-          params:
-              icon: brand-twitter
 
 related:
     includeNewer: true
@@ -226,7 +209,7 @@ markup:
             ## Set to true if you have HTML content inside Markdown
             unsafe: false
     tableOfContents:
-        endLevel: 4
+        endLevel: 3
         ordered: true
         startLevel: 2
     highlight:
