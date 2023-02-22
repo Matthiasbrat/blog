@@ -1,5 +1,6 @@
 ---
 title: "Search"
+draft: true
 slug: "search"
 layout: "search"
 outputs:

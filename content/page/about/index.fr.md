@@ -1,5 +1,5 @@
 ---
-title: 关于
+title: À propos
 menu:
     main: 
         weight: -90
