@@ -1,30 +1,45 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Pages on Matthias&#39; blog</title>
-    <link>https://matthiasbrat.dev/fr/page/</link>
-    <description>Recent content in Pages on Matthias&#39; blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 22 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://matthiasbrat.dev/fr/page/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>À propos</title>
-      <link>https://matthiasbrat.dev/fr/%C3%A0-propos/</link>
-      <pubDate>Wed, 22 Feb 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://matthiasbrat.dev/fr/%C3%A0-propos/</guid>
-      <description>J&amp;rsquo;ai commencé ce blog pour raconter ce dont j&amp;rsquo;ai envie et garder une trace de mes travaux en programmation. J&amp;rsquo;y posterai aussi des photos, musiques, etc&amp;hellip; J&amp;rsquo;ai repris l&amp;rsquo;idée de Macawls, qui est un super gars que je connais depuis quelques années, allez voir son blog et ses travaux :
-J&amp;rsquo;espère que je m&amp;rsquo;amuserai dans cette petite aventure :) (et que j&amp;rsquo;aurai plus de sommeil).</description>
-    </item>
-    
-    <item>
-      <title>Archives</title>
-      <link>https://matthiasbrat.dev/fr/archives/</link>
-      <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://matthiasbrat.dev/fr/archives/</guid>
-      <description></description>
-    </item>
-    
-  </channel>
+    <channel>
+        <title>Pages on Matthias&#39; blog</title>
+        <link>https://matthiasbrat.dev/fr/page/</link>
+        <description>Recent content in Pages on Matthias&#39; blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Wed, 22 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://matthiasbrat.dev/fr/page/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>À propos</title>
+        <link>https://matthiasbrat.dev/fr/%C3%A0-propos/</link>
+        <pubDate>Wed, 22 Feb 2023 00:00:00 +0000</pubDate>
+        
+        <guid>https://matthiasbrat.dev/fr/%C3%A0-propos/</guid>
+        <description>&lt;p&gt;J&amp;rsquo;ai commencé ce blog pour raconter ce dont j&amp;rsquo;ai envie et garder une trace de mes travaux en programmation. J&amp;rsquo;y posterai aussi des photos, musiques, etc&amp;hellip;
+J&amp;rsquo;ai repris l&amp;rsquo;idée de Macawls, qui est un super gars que je connais depuis quelques années, allez voir son blog et ses travaux :&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://macawls.dev/blog&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;&lt;img src=&#34;https://matthiasbrat.dev/fr/%C3%A0-propos/macawls.jpg&#34;
+	width=&#34;76&#34;
+	height=&#34;76&#34;
+	srcset=&#34;https://matthiasbrat.dev/fr/%C3%A0-propos/macawls_hu882cd72fa15ba95ebc26827bc79a79ac_2703_480x0_resize_q75_box.jpg 480w, https://matthiasbrat.dev/fr/%C3%A0-propos/macawls_hu882cd72fa15ba95ebc26827bc79a79ac_2703_1024x0_resize_q75_box.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;macawls&amp;rsquo; blog&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;100&#34;
+		data-flex-basis=&#34;240px&#34;
+	
+&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;J&amp;rsquo;espère que je m&amp;rsquo;amuserai dans cette petite aventure :) (et que j&amp;rsquo;aurai plus de sommeil).&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Archives</title>
+        <link>https://matthiasbrat.dev/fr/archives/</link>
+        <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
+        
+        <guid>https://matthiasbrat.dev/fr/archives/</guid>
+        <description></description>
+        </item>
+        
+    </channel>
 </rss>

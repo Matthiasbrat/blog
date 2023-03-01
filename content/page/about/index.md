@@ -1,7 +1,16 @@
 ---
-title: "About"
-date: 2023-03-01T09:34:02+01:00
-draft: true
+title: About
+description: My blog and why I started it.
+date: '2023-02-22'
+aliases:
+  - about
+  - me
+lastmod: '2023-02-22'
+menu:
+    main: 
+        weight: -90
+        params:
+            icon: user
 ---
 
 I started this blog to get a trace of my work, discoveries and more about my journey in programming. Also I want to share music, pictures and global things about my life and how I see my future in life.

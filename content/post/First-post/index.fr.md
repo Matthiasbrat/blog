@@ -11,4 +11,4 @@ lastmod: '2023-02-22'
 
 Hey, premier poste du blog :) check ma page à propos :
 
-https://matthiasbrat.dev/fr/à-propos/
+https://matthiasbrat.dev/about/

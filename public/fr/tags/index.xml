@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Tags on Matthias&#39; blog</title>
-    <link>https://matthiasbrat.dev/fr/tags/</link>
-    <description>Recent content in Tags on Matthias&#39; blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 22 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://matthiasbrat.dev/fr/tags/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>autre</title>
-      <link>https://matthiasbrat.dev/fr/tags/autre/</link>
-      <pubDate>Wed, 22 Feb 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://matthiasbrat.dev/fr/tags/autre/</guid>
-      <description></description>
-    </item>
-    
-  </channel>
+    <channel>
+        <title>Tags on Matthias&#39; blog</title>
+        <link>https://matthiasbrat.dev/fr/tags/</link>
+        <description>Recent content in Tags on Matthias&#39; blog</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Wed, 22 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://matthiasbrat.dev/fr/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>autre</title>
+        <link>https://matthiasbrat.dev/fr/tags/autre/</link>
+        <pubDate>Wed, 22 Feb 2023 00:00:00 +0000</pubDate>
+        
+        <guid>https://matthiasbrat.dev/fr/tags/autre/</guid>
+        <description></description>
+        </item>
+        
+    </channel>
 </rss>
