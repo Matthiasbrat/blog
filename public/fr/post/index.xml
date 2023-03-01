@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-    <channel>
-        <title>Posts on Matthias&#39; blog</title>
-        <link>https://matthiasbrat.dev/fr/post/</link>
-        <description>Recent content in Posts on Matthias&#39; blog</description>
-        <generator>Hugo -- gohugo.io</generator>
-        <language>en-us</language>
-        <lastBuildDate>Wed, 22 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://matthiasbrat.dev/fr/post/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Premier poste 👋</title>
-        <link>https://matthiasbrat.dev/fr/p/premier-poste/</link>
-        <pubDate>Wed, 22 Feb 2023 00:00:00 +0000</pubDate>
-        
-        <guid>https://matthiasbrat.dev/fr/p/premier-poste/</guid>
-        <description>&lt;p&gt;Hey, premier poste du blog :) check ma page à propos :&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://matthiasbrat.dev/about/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://matthiasbrat.dev/about/&lt;/a&gt;&lt;/p&gt;
-</description>
-        </item>
-        
-    </channel>
+  <channel>
+    <title>Posts on Matthias&#39; blog</title>
+    <link>https://matthiasbrat.dev/fr/post/</link>
+    <description>Recent content in Posts on Matthias&#39; blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 22 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://matthiasbrat.dev/fr/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Premier poste 👋</title>
+      <link>https://matthiasbrat.dev/fr/p/premier-poste/</link>
+      <pubDate>Wed, 22 Feb 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://matthiasbrat.dev/fr/p/premier-poste/</guid>
+      <description>Hey, premier poste du blog :) check ma page à propos :
+https://matthiasbrat.dev/about/</description>
+    </item>
+    
+  </channel>
 </rss>
