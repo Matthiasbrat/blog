@@ -24,7 +24,11 @@ J&amp;rsquo;espère que je m&amp;rsquo;amuserai dans cette petite aventure :) (e
       
       <guid>https://matthiasbrat.dev/fr/p/premier-poste/</guid>
       <description>Hey, premier poste du blog :) check ma page à propos :
+<<<<<<< HEAD
 https://matthiasbrat.dev/about/</description>
+=======
+https://matthiasbrat.dev/fr/à-propos/</description>
+>>>>>>> refs/remotes/origin/main
     </item>
     
     <item>
