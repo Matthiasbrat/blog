@@ -1,0 +1,27 @@
+name: "Documentation"
+slug: "docs"
+description: "Learn fast with structured guides and tutorials"
+showInNav: true
+navOrder: 2
+navLabel: "Learn"
+
+layout:
+  index: "grid"
+  topic: "list"
+  content: "docs"
+
+structure:
+  hasTopics: true
+  sortBy: "order"
+  sortOrder: "asc"
+
+features:
+  comments: true
+  reactions: false
+  sidePanel: true
+  pdfViewer: true
+  topicNav: true
+  prevNext: true
+  breadcrumbs: true
+  showDate: false
+  showUpdated: true
