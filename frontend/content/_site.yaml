@@ -1,0 +1,35 @@
+site:
+  title: "Your Name"
+  description: "Personal website, blog, and documentation"
+  url: "https://yourname.com"
+  author: "Your Name"
+
+navigation:
+  order: ["blog", "docs", "referrals", "projects"]
+  overrides:
+    blog:
+      label: "Blog"
+    docs:
+      label: "Learn"
+    referrals:
+      label: "People"
+    projects:
+      label: "Projects"
+
+comments:
+  provider: "giscus"
+  repo: "Matthiasbrat/blog"
+  repoId: "R_kgDOQntF3Q"
+  category: "Announcements"
+  categoryId: "DIC_kwDOQntF3c4Cztwh"
+
+seo:
+  defaultOgImage: "/images/og-default.png"
+  twitterHandle: "@yourhandle"
+
+defaults:
+  features:
+    comments: false
+    reactions: false
+    sidePanel: false
+    search: true

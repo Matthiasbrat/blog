@@ -1,19 +1,19 @@
 {
-  "name": "radiant-rotation",
+  "name": "personal-website",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host 0.0.0.0 --port 3000",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.13",
-    "@astrojs/sitemap": "^3.6.0",
     "astro": "^5.16.5",
+    "@astrojs/mdx": "^4.3.0",
+    "@astrojs/sitemap": "^3.3.1",
+    "sharp": "^0.34.2",
     "gray-matter": "^4.0.3",
-    "js-yaml": "^4.1.1",
-    "sharp": "^0.34.5"
+    "js-yaml": "^4.1.0"
   }
 }
