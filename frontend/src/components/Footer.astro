@@ -6,61 +6,23 @@ const currentYear = new Date().getFullYear();
 ---
 
 <footer class="footer">
-  <div class="footer-container">
-    <div class="footer-content">
-      <p class="footer-copyright">
-        &copy; {currentYear} {siteConfig.site.author}. All rights reserved.
-      </p>
-      <nav class="footer-nav">
-        <a href="/rss.xml">RSS</a>
-        <a href="/sitemap-index.xml">Sitemap</a>
-      </nav>
-    </div>
-  </div>
+  <p>&copy; {currentYear} {siteConfig.site.author}</p>
 </footer>
 
 <style>
   .footer {
     border-top: 1px solid var(--color-border);
-    margin-top: auto;
-  }
-  
-  .footer-container {
-    max-width: var(--max-width-wide);
-    margin: 0 auto;
+    margin-top: var(--space-xl);
     padding: var(--space-lg) var(--space-md);
+    max-width: var(--max-width);
+    margin-left: auto;
+    margin-right: auto;
   }
   
-  .footer-content {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-    align-items: center;
-  }
-  
-  @media (min-width: 640px) {
-    .footer-content {
-      flex-direction: row;
-      justify-content: space-between;
-    }
-  }
-  
-  .footer-copyright {
+  .footer p {
     font-size: 0.875rem;
     color: var(--color-text-muted);
-  }
-  
-  .footer-nav {
-    display: flex;
-    gap: var(--space-md);
-  }
-  
-  .footer-nav a {
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-  }
-  
-  .footer-nav a:hover {
-    color: var(--color-text);
+    text-align: center;
+    margin: 0;
   }
 </style>
