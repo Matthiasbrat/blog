@@ -1,7 +1,7 @@
 ---
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
 import { getSectionBySlug } from '../../lib/sections';
-import { getFlatContent, getFlatContentBySlug } from '../../lib/content';
+import { getFlatContentBySlug, getFlatContent } from '../../lib/content';
 
 export async function getStaticPaths() {
   const { getFlatContent } = await import('../../lib/content');
@@ -22,56 +22,45 @@ if (!projectData) {
 
 const { meta, content } = projectData;
 
-const breadcrumbs = [
-  { label: section?.name || 'Projects', href: '/projects' },
-  { label: meta.title, href: `/projects/${slug}` }
-];
-
-let sidePanel = meta.sidePanel || [];
-if (sidePanel.length === 0) {
-  const headingRegex = /^##\s+(.+)$/gm;
-  let match;
-  while ((match = headingRegex.exec(content)) !== null) {
-    const heading = match[1];
-    const anchor = '#' + heading.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    sidePanel.push({ heading, anchor });
-  }
+// Simple markdown to HTML
+function renderContent(md: string): string {
+  return md
+    .replace(/^# .+$/m, '')
+    .replace(/^## (.+)$/gm, (_, t) => `<h2 id="${t.toLowerCase().replace(/[^a-z0-9]+/g, '-')}">${t}</h2>`)
+    .replace(/^### (.+)$/gm, (_, t) => `<h3>${t}</h3>`)
+    .replace(/```(\w+)?\n([\s\S]*?)```/g, (_, lang, code) => `<pre><code>${code.trim()}</code></pre>`)
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    .replace(/^\- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
+    .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+    .replace(/^(?!<[huplo]|$)(.+)$/gm, '<p>$1</p>')
+    .replace(/<\/ul>\n<ul>/g, '')
+    .trim();
 }
 ---
 
 <ArticleLayout
   title={meta.title}
   description={meta.description}
-  showSidePanel={false}
   showComments={false}
-  showReactions={section?.features?.reactions ?? true}
-  showBreadcrumbs={true}
   showDate={false}
-  breadcrumbs={breadcrumbs}
 >
-  <Fragment set:html={content.replace(/^#.*$/m, '').trim().split('\n').map(line => {
-    if (line.startsWith('## ')) {
-      const text = line.slice(3);
-      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      return `<h2 id="${id}">${text}</h2>`;
-    }
-    if (line.startsWith('### ')) {
-      const text = line.slice(4);
-      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      return `<h3 id="${id}">${text}</h3>`;
-    }
-    if (line.startsWith('```')) {
-      return line;
-    }
-    if (line.trim() === '') {
-      return '';
-    }
-    if (line.startsWith('- ')) {
-      return `<li>${line.slice(2)}</li>`;
-    }
-    if (!line.startsWith('<') && !line.startsWith('*') && !line.match(/^\d+\./)) {
-      return `<p>${line}</p>`;
-    }
-    return line;
-  }).join('\n')} />
+  <Fragment set:html={renderContent(content)} />
+  
+  <p class="back"><a href="/projects">← All projects</a></p>
 </ArticleLayout>
+
+<style>
+  .back {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+    font-size: 0.9375rem;
+  }
+  
+  .back a {
+    color: var(--color-text-muted);
+  }
+</style>
