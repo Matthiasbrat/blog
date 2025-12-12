@@ -10,21 +10,19 @@ const { title, description } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
-  <header class="page-header">
+  <header>
     <h1>{title}</h1>
-    {description && <p class="description">{description}</p>}
+    {description && <p class="page-description">{description}</p>}
   </header>
   
   <slot />
 </BaseLayout>
 
 <style>
-  .page-header {
+  .page-description {
+    font-size: 1.125rem;
+    color: var(--color-text-light);
+    margin-top: calc(var(--space-xl) * -1 + var(--space-md));
     margin-bottom: var(--space-xl);
-  }
-  
-  .description {
-    color: var(--color-text-muted);
-    margin-top: var(--space-sm);
   }
 </style>
