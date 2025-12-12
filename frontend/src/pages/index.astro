@@ -15,99 +15,95 @@ for (const topic of blogTopics) {
 allPosts = allPosts.sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0));
 
 const featuredPosts = allPosts.slice(0, 3);
-const recentPosts = allPosts.slice(3, 9);
+const recentPosts = allPosts.slice(0, 6);
 
-// Topic icons
-const topicIcons: Record<string, string> = {
-  javascript: '⚡',
-  typescript: '🔷',
-  rust: '🦀',
-  'getting-started': '🚀',
-  advanced: '🎯'
+// Topic styles
+const topicStyles: Record<string, { icon: string; color: string }> = {
+  javascript: { icon: '⚡', color: 'var(--pastel-orange)' },
+  typescript: { icon: '🔷', color: 'var(--pastel-blue)' },
+  rust: { icon: '🦀', color: 'var(--pastel-pink)' },
 };
 
 function formatDate(d: Date): string {
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 ---
 
 <BaseLayout>
   <!-- Hero -->
-  <section class="hero">
-    <div class="hero-content container">
-      <div class="hero-badge">
-        <span class="hero-badge-dot"></span>
-        Currently writing about TypeScript
-      </div>
-      <h1>Ideas, code, and the people who inspire me</h1>
-      <p class="hero-subtitle">
-        Welcome to my corner of the web. I write about programming, share documentation, 
-        and highlight the talented people I've worked with.
-      </p>
-      <div class="hero-buttons">
-        <a href="/blog" class="btn btn-primary">
-          Read the Blog
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
-        <a href="/docs" class="btn btn-secondary">Browse Docs</a>
-      </div>
+  <section class="hero container">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Currently writing about TypeScript
+    </div>
+    <h1>Ideas, code, and the people who inspire me</h1>
+    <p class="hero-subtitle">
+      Welcome to my corner of the web. I write about programming, 
+      share documentation, and highlight talented people.
+    </p>
+    <div class="hero-buttons">
+      <a href="/blog" class="btn btn-primary">
+        Read the Blog
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+      <a href="/docs" class="btn btn-secondary">Browse Docs</a>
     </div>
   </section>
+  
+  <hr class="decorated">
   
   <!-- Featured Posts -->
   <section class="section">
     <div class="container">
       <div class="section-header">
-        <div>
-          <h2 class="section-title">Featured Articles</h2>
-          <p class="section-subtitle">Deep dives into interesting topics</p>
-        </div>
-        <a href="/blog" class="section-link">
-          View all posts
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
+        <div class="section-label">Featured</div>
+        <h2 class="section-title">Latest Articles</h2>
+        <p class="section-subtitle">Deep dives into programming topics</p>
       </div>
       
-      <ul class="cards-grid">
-        {featuredPosts.map(post => (
-          <li>
-            <a href={`/blog/${post.topic}/${post.slug}`} class="post-card">
-              <div class="post-card-date">{formatDate(post.date)}</div>
-              <h3>{post.title}</h3>
-              <p class="post-card-excerpt">{post.description}</p>
-              <span class="post-card-tag">{post.topicName}</span>
-            </a>
-          </li>
-        ))}
+      <ul class="cards-grid cards-grid-narrow">
+        {featuredPosts.map(post => {
+          const style = topicStyles[post.topic] || { icon: '📝', color: 'var(--pastel-green)' };
+          return (
+            <li>
+              <a href={`/blog/${post.topic}/${post.slug}`} class="post-card">
+                <div class="post-card-header">
+                  <span class="post-card-tag" style={`background: ${style.color}`}>{post.topicName}</span>
+                  <span class="post-card-date">{formatDate(post.date)}</span>
+                </div>
+                <h3>{post.title}</h3>
+                <p class="post-card-excerpt">{post.description}</p>
+              </a>
+            </li>
+          );
+        })}
       </ul>
     </div>
   </section>
   
   <!-- Topics -->
-  <section class="section" style="background: var(--bg-accent);">
+  <section class="section" style="background: var(--bg-soft);">
     <div class="container">
       <div class="section-header">
-        <div>
-          <h2 class="section-title">Explore Topics</h2>
-          <p class="section-subtitle">Browse by category</p>
-        </div>
+        <div class="section-label">Explore</div>
+        <h2 class="section-title">Browse by Topic</h2>
+        <p class="section-subtitle">Find articles organized by category</p>
       </div>
       
-      <ul class="cards-grid">
+      <ul class="cards-grid cards-grid-narrow">
         {blogTopics.map(topic => {
           const posts = getContentForTopic('blog', topic.slug);
+          const style = topicStyles[topic.slug] || { icon: '📝', color: 'var(--pastel-green)' };
           return (
             <li>
-              <a href={`/blog/${topic.slug}`} class="topic-card">
-                <div class="topic-card-icon">{topicIcons[topic.slug] || '📝'}</div>
+              <a href={`/blog/${topic.slug}`} class="topic-card" style={`--card-accent: ${style.color}`}>
+                <div class="topic-card-icon">{style.icon}</div>
                 <h3>{topic.name}</h3>
                 <p class="topic-card-description">{topic.description}</p>
                 <div class="topic-card-meta">
-                  <span class="topic-card-count">{posts.length} articles</span>
+                  <span class="topic-card-count">{posts.length} articles →</span>
                 </div>
               </a>
             </li>
@@ -117,25 +113,35 @@ function formatDate(d: Date): string {
     </div>
   </section>
   
-  <!-- Recent Posts -->
+  <!-- Recent Writing -->
   <section class="section">
-    <div class="container">
+    <div class="container-narrow">
       <div class="section-header">
-        <div>
-          <h2 class="section-title">Recent Writing</h2>
-          <p class="section-subtitle">Latest thoughts and tutorials</p>
-        </div>
+        <div class="section-label">Archive</div>
+        <h2 class="section-title">Recent Writing</h2>
+        <p class="section-subtitle">All the latest posts in chronological order</p>
       </div>
       
-      <div class="content-container">
+      <div class="post-list-section">
         <ul class="post-list">
-          {recentPosts.map(post => (
-            <li class="post-item">
-              <time datetime={post.date?.toISOString()}>{formatDate(post.date)}</time>
-              <a href={`/blog/${post.topic}/${post.slug}`}>{post.title}</a>
-            </li>
-          ))}
+          {recentPosts.map(post => {
+            const style = topicStyles[post.topic] || { icon: '📝', color: 'var(--pastel-green)' };
+            return (
+              <li class="post-item">
+                <time datetime={post.date?.toISOString()}>{formatDate(post.date)}</time>
+                <div class="post-item-content">
+                  <a href={`/blog/${post.topic}/${post.slug}`}>{post.title}</a>
+                  <p class="post-item-excerpt">{post.description}</p>
+                </div>
+                <span class="post-item-tag" style={`background: ${style.color}; color: var(--text-secondary)`}>{post.topicName}</span>
+              </li>
+            );
+          })}
         </ul>
+      </div>
+      
+      <div style="text-align: center; margin-top: var(--space-xl);">
+        <a href="/blog" class="btn btn-secondary">View all posts →</a>
       </div>
     </div>
   </section>
