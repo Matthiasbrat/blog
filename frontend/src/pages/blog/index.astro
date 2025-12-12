@@ -9,34 +9,38 @@ const topics = getTopicsForSection('blog');
 ---
 
 <BaseLayout title="Blog" description={section?.description}>
-  <h1>Blog</h1>
-  <p class="description">{section?.description}</p>
+  <header>
+    <h1>Blog</h1>
+    <p class="description">{section?.description}</p>
+  </header>
   
-  <h2>Topics</h2>
-  <ul class="topics">
-    {topics.map(topic => {
-      const posts = getContentForTopic('blog', topic.slug);
-      return (
-        <TopicCard
-          title={topic.name}
-          description={topic.description}
-          href={`/blog/${topic.slug}`}
-          count={posts.length}
-        />
-      );
-    })}
-  </ul>
+  <section>
+    <h2>Topics</h2>
+    <ul class="topic-list">
+      {topics.map(topic => {
+        const posts = getContentForTopic('blog', topic.slug);
+        return (
+          <TopicCard
+            title={topic.name}
+            description={topic.description}
+            href={`/blog/${topic.slug}`}
+            count={posts.length}
+          />
+        );
+      })}
+    </ul>
+  </section>
 </BaseLayout>
 
 <style>
   .description {
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-xl);
+    font-size: 1.125rem;
+    color: var(--color-text-light);
+    margin-top: calc(var(--space-xl) * -1 + var(--space-md));
+    margin-bottom: var(--space-2xl);
   }
   
-  h2 {
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: var(--space-xs);
-    margin-bottom: var(--space-lg);
+  section h2 {
+    margin-top: 0;
   }
 </style>
