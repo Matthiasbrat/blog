@@ -1,42 +1,46 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import TopicCard from '../../components/TopicCard.astro';
 import { getSectionBySlug } from '../../lib/sections';
 import { getTopicsForSection, getContentForTopic } from '../../lib/content';
 
 const section = getSectionBySlug('docs');
 const topics = getTopicsForSection('docs');
+
+const topicStyles: Record<string, { icon: string; color: string }> = {
+  'getting-started': { icon: '🚀', color: 'var(--pastel-green)' },
+  'advanced': { icon: '🎯', color: 'var(--pastel-purple)' },
+};
 ---
 
 <BaseLayout title="Documentation" description={section?.description}>
-  <h1>Documentation</h1>
-  <p class="description">{section?.description}</p>
+  <div class="page-header container-narrow">
+    <div class="page-header-icon">📚</div>
+    <h1>Documentation</h1>
+    <p class="page-header-description">{section?.description}</p>
+  </div>
   
-  <h2>Topics</h2>
-  <ul class="topics">
-    {topics.map(topic => {
-      const docs = getContentForTopic('docs', topic.slug);
-      return (
-        <TopicCard
-          title={topic.name}
-          description={topic.description}
-          href={`/docs/${topic.slug}`}
-          count={docs.length}
-        />
-      );
-    })}
-  </ul>
+  <hr class="decorated">
+  
+  <section class="section" style="padding-top: 0;">
+    <div class="container-narrow">
+      <ul class="cards-grid" style="max-width: 700px; margin: 0 auto;">
+        {topics.map(topic => {
+          const docs = getContentForTopic('docs', topic.slug);
+          const style = topicStyles[topic.slug] || { icon: '📖', color: 'var(--pastel-blue)' };
+          return (
+            <li>
+              <a href={`/docs/${topic.slug}`} class="topic-card" style={`--card-accent: ${style.color}`}>
+                <div class="topic-card-icon">{style.icon}</div>
+                <h3>{topic.name}</h3>
+                <p class="topic-card-description">{topic.description}</p>
+                <div class="topic-card-meta">
+                  <span class="topic-card-count">{docs.length} docs →</span>
+                </div>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </section>
 </BaseLayout>
-
-<style>
-  .description {
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-xl);
-  }
-  
-  h2 {
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: var(--space-xs);
-    margin-bottom: var(--space-lg);
-  }
-</style>
