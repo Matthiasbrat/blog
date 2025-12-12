@@ -1,0 +1,4 @@
+name: "JavaScript"
+slug: "javascript"
+description: "Modern JavaScript tutorials and deep dives into ES6+, async patterns, and more"
+order: 1

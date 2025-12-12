@@ -1,0 +1,4 @@
+name: "Rust"
+slug: "rust"
+description: "Deep dives into Rust's memory safety, ownership, and systems programming concepts"
+order: 2

@@ -1,0 +1,25 @@
+name: "Blog"
+slug: "blog"
+description: "Thoughts on programming, design, and life"
+showInNav: true
+navOrder: 1
+
+layout:
+  index: "grid"
+  topic: "list"
+  content: "article"
+
+structure:
+  hasTopics: true
+  sortBy: "date"
+  sortOrder: "desc"
+
+features:
+  comments: true
+  reactions: true
+  sidePanel: true
+  asides: true
+  breadcrumbs: true
+  estimatedReadTime: true
+  showDate: true
+  showUpdated: true
