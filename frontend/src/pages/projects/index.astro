@@ -5,33 +5,43 @@ import { getFlatContent } from '../../lib/content';
 
 const section = getSectionBySlug('projects');
 const projects = getFlatContent('projects');
+
+const projectStyles: Record<string, { icon: string; color: string }> = {
+  'personal-website': { icon: '🌐', color: 'var(--pastel-green)' },
+  'cli-tool': { icon: '⚙️', color: 'var(--pastel-purple)' },
+  'task-manager': { icon: '✅', color: 'var(--pastel-blue)' },
+  'weather-dashboard': { icon: '🌤️', color: 'var(--pastel-orange)' },
+};
 ---
 
 <BaseLayout title="Projects" description={section?.description}>
-  <h1>Projects</h1>
-  <p class="description">{section?.description}</p>
+  <div class="page-header container-narrow">
+    <div class="page-header-icon">🛠️</div>
+    <h1>Projects</h1>
+    <p class="page-header-description">{section?.description}</p>
+  </div>
   
-  <ul class="projects">
-    {projects.map(project => (
-      <li>
-        <a href={`/projects/${project.slug}`}>{project.title}</a>
-        {project.description && <span class="desc"> — {project.description}</span>}
-      </li>
-    ))}
-  </ul>
+  <hr class="decorated">
+  
+  <section class="section" style="padding-top: 0;">
+    <div class="container-narrow">
+      <ul class="cards-grid" style="max-width: 700px; margin: 0 auto;">
+        {projects.map(project => {
+          const style = projectStyles[project.slug] || { icon: '📦', color: 'var(--pastel-green)' };
+          return (
+            <li>
+              <a href={`/projects/${project.slug}`} class="topic-card" style={`--card-accent: ${style.color}`}>
+                <div class="topic-card-icon">{style.icon}</div>
+                <h3>{project.title}</h3>
+                <p class="topic-card-description">{project.description}</p>
+                <div class="topic-card-meta">
+                  <span class="topic-card-count">View project →</span>
+                </div>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </section>
 </BaseLayout>
-
-<style>
-  .description {
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-xl);
-  }
-  
-  .projects li {
-    margin-bottom: var(--space-sm);
-  }
-  
-  .desc {
-    color: var(--color-text-muted);
-  }
-</style>
