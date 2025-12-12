@@ -1,0 +1,82 @@
+---
+interface Props {
+  title: string;
+  href: string;
+  date?: Date;
+  readingTime?: number;
+}
+
+const { title, href, date, readingTime } = Astro.props;
+
+function formatDate(d: Date): string {
+  return d.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+}
+---
+
+<li class="post-item">
+  <a href={href} class="post-link">
+    <span class="post-title">{title}</span>
+    <span class="post-meta">
+      {date && <time datetime={date.toISOString()}>{formatDate(date)}</time>}
+      {readingTime && <span class="reading-time">{readingTime} min</span>}
+    </span>
+  </a>
+</li>
+
+<style>
+  .post-item {
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .post-item:last-child {
+    border-bottom: none;
+  }
+  
+  .post-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-md);
+    padding: var(--space-md) 0;
+    text-decoration: none;
+    transition: background var(--transition-fast);
+  }
+  
+  .post-link:hover {
+    text-decoration: none;
+  }
+  
+  .post-link:hover .post-title {
+    color: var(--color-accent);
+  }
+  
+  .post-title {
+    color: var(--color-text);
+    font-weight: 500;
+    transition: color var(--transition-fast);
+  }
+  
+  .post-meta {
+    display: flex;
+    gap: var(--space-sm);
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+  
+  .reading-time::before {
+    content: '•';
+    margin-right: var(--space-sm);
+  }
+  
+  @media (max-width: 480px) {
+    .post-link {
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+  }
+</style>

@@ -1,0 +1,103 @@
+---
+const reactions = [
+  { emoji: '👍', label: 'Like', count: 0 },
+  { emoji: '❤️', label: 'Love', count: 0 },
+  { emoji: '🎉', label: 'Celebrate', count: 0 },
+  { emoji: '🤔', label: 'Thinking', count: 0 },
+  { emoji: '🚀', label: 'Rocket', count: 0 }
+];
+---
+
+<section class="reactions" aria-label="Reactions">
+  <div class="reactions-list">
+    {reactions.map(reaction => (
+      <button 
+        class="reaction-btn" 
+        data-reaction={reaction.label.toLowerCase()}
+        aria-label={`${reaction.label} reaction`}
+      >
+        <span class="reaction-emoji">{reaction.emoji}</span>
+        <span class="reaction-count" data-count="0">0</span>
+      </button>
+    ))}
+  </div>
+</section>
+
+<style>
+  .reactions {
+    margin-top: var(--space-xl);
+    padding: var(--space-md) 0;
+  }
+  
+  .reactions-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+  
+  .reaction-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+  }
+  
+  .reaction-btn:hover {
+    border-color: var(--color-accent);
+    background: var(--color-bg);
+  }
+  
+  .reaction-btn.active {
+    border-color: var(--color-accent);
+    background: rgba(37, 99, 235, 0.1);
+  }
+  
+  .reaction-emoji {
+    font-size: 1.125rem;
+  }
+  
+  .reaction-count {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    min-width: 1rem;
+    text-align: center;
+  }
+</style>
+
+<script>
+  const reactionBtns = document.querySelectorAll('.reaction-btn');
+  const pageKey = `reactions-${window.location.pathname}`;
+  
+  // Load saved reactions
+  const saved = JSON.parse(localStorage.getItem(pageKey) || '{}');
+  
+  reactionBtns.forEach(btn => {
+    const type = btn.getAttribute('data-reaction');
+    const countEl = btn.querySelector('.reaction-count');
+    
+    if (saved[type!]) {
+      btn.classList.add('active');
+      countEl!.textContent = '1';
+    }
+    
+    btn.addEventListener('click', () => {
+      const isActive = btn.classList.toggle('active');
+      const currentCount = parseInt(countEl!.textContent || '0');
+      
+      if (isActive) {
+        countEl!.textContent = (currentCount + 1).toString();
+        saved[type!] = true;
+      } else {
+        countEl!.textContent = Math.max(0, currentCount - 1).toString();
+        delete saved[type!];
+      }
+      
+      localStorage.setItem(pageKey, JSON.stringify(saved));
+    });
+  });
+</script>
