@@ -2,64 +2,141 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getSiteConfig } from '../lib/sections';
 import { getTopicsForSection, getContentForTopic } from '../lib/content';
-import PostItem from '../components/PostItem.astro';
 
 const siteConfig = getSiteConfig();
 
-// Get recent blog posts
+// Get all blog posts
 const blogTopics = getTopicsForSection('blog');
-let recentPosts: any[] = [];
+let allPosts: any[] = [];
 for (const topic of blogTopics) {
   const posts = getContentForTopic('blog', topic.slug);
-  recentPosts = [...recentPosts, ...posts.map(p => ({ ...p, topic: topic.slug }))];
+  allPosts = [...allPosts, ...posts.map(p => ({ ...p, topic: topic.slug, topicName: topic.name }))];
 }
-recentPosts = recentPosts
-  .sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0))
-  .slice(0, 8);
+allPosts = allPosts.sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0));
+
+const featuredPosts = allPosts.slice(0, 3);
+const recentPosts = allPosts.slice(3, 9);
+
+// Topic icons
+const topicIcons: Record<string, string> = {
+  javascript: '⚡',
+  typescript: '🔷',
+  rust: '🦀',
+  'getting-started': '🚀',
+  advanced: '🎯'
+};
+
+function formatDate(d: Date): string {
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
 ---
 
 <BaseLayout>
-  <header class="intro">
-    <h1>Welcome</h1>
-    <p>
-      I'm {siteConfig.site.author}. I write about programming, share documentation, 
-      and connect with great people. Browse around.
-    </p>
-  </header>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content container">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Currently writing about TypeScript
+      </div>
+      <h1>Ideas, code, and the people who inspire me</h1>
+      <p class="hero-subtitle">
+        Welcome to my corner of the web. I write about programming, share documentation, 
+        and highlight the talented people I've worked with.
+      </p>
+      <div class="hero-buttons">
+        <a href="/blog" class="btn btn-primary">
+          Read the Blog
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="/docs" class="btn btn-secondary">Browse Docs</a>
+      </div>
+    </div>
+  </section>
   
-  <section>
-    <h2>Recent Writing</h2>
-    <ul class="post-list">
-      {recentPosts.map(post => (
-        <PostItem 
-          title={post.title} 
-          href={`/blog/${post.topic}/${post.slug}`}
-          date={post.date}
-        />
-      ))}
-    </ul>
-    <p class="view-all"><a href="/blog">View all posts →</a></p>
+  <!-- Featured Posts -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Featured Articles</h2>
+          <p class="section-subtitle">Deep dives into interesting topics</p>
+        </div>
+        <a href="/blog" class="section-link">
+          View all posts
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+      
+      <ul class="cards-grid">
+        {featuredPosts.map(post => (
+          <li>
+            <a href={`/blog/${post.topic}/${post.slug}`} class="post-card">
+              <div class="post-card-date">{formatDate(post.date)}</div>
+              <h3>{post.title}</h3>
+              <p class="post-card-excerpt">{post.description}</p>
+              <span class="post-card-tag">{post.topicName}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+  
+  <!-- Topics -->
+  <section class="section" style="background: var(--bg-accent);">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Explore Topics</h2>
+          <p class="section-subtitle">Browse by category</p>
+        </div>
+      </div>
+      
+      <ul class="cards-grid">
+        {blogTopics.map(topic => {
+          const posts = getContentForTopic('blog', topic.slug);
+          return (
+            <li>
+              <a href={`/blog/${topic.slug}`} class="topic-card">
+                <div class="topic-card-icon">{topicIcons[topic.slug] || '📝'}</div>
+                <h3>{topic.name}</h3>
+                <p class="topic-card-description">{topic.description}</p>
+                <div class="topic-card-meta">
+                  <span class="topic-card-count">{posts.length} articles</span>
+                </div>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </section>
+  
+  <!-- Recent Posts -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Recent Writing</h2>
+          <p class="section-subtitle">Latest thoughts and tutorials</p>
+        </div>
+      </div>
+      
+      <div class="content-container">
+        <ul class="post-list">
+          {recentPosts.map(post => (
+            <li class="post-item">
+              <time datetime={post.date?.toISOString()}>{formatDate(post.date)}</time>
+              <a href={`/blog/${post.topic}/${post.slug}`}>{post.title}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   </section>
 </BaseLayout>
-
-<style>
-  .intro {
-    margin-bottom: var(--space-2xl);
-  }
-  
-  .intro p {
-    font-size: 1.25rem;
-    color: var(--color-text-light);
-    max-width: 55ch;
-  }
-  
-  section h2 {
-    margin-top: 0;
-  }
-  
-  .view-all {
-    margin-top: var(--space-lg);
-    font-family: var(--font-sans);
-    font-size: 0.9375rem;
-  }
-</style>
