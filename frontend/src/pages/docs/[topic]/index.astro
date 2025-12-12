@@ -1,11 +1,11 @@
 ---
-import ListLayout from '../../../layouts/ListLayout.astro';
-import PostItem from '../../../components/PostItem.astro';
-import { getSectionBySlug } from '../../../lib/sections';
-import { getTopicBySlug, getContentForTopic } from '../../../lib/content';
+import ListLayout from '../../layouts/ListLayout.astro';
+import PostItem from '../../components/PostItem.astro';
+import { getSectionBySlug } from '../../lib/sections';
+import { getTopicBySlug, getContentForTopic } from '../../lib/content';
 
 export async function getStaticPaths() {
-  const { getTopicsForSection } = await import('../../../lib/content');
+  const { getTopicsForSection } = await import('../../lib/content');
   const topics = getTopicsForSection('docs');
   
   return topics.map(topic => ({
