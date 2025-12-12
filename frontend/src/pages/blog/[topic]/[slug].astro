@@ -1,0 +1,94 @@
+---
+import ArticleLayout from '../../../../layouts/ArticleLayout.astro';
+import { getSectionBySlug } from '../../../../lib/sections';
+import { getTopicBySlug, getContentForTopic, getContentBySlug } from '../../../../lib/content';
+
+export async function getStaticPaths() {
+  const { getTopicsForSection, getContentForTopic } = await import('../../../../lib/content');
+  const topics = getTopicsForSection('blog');
+  
+  const paths = [];
+  for (const topic of topics) {
+    const posts = getContentForTopic('blog', topic.slug);
+    for (const post of posts) {
+      paths.push({
+        params: { topic: topic.slug, slug: post.slug }
+      });
+    }
+  }
+  
+  return paths;
+}
+
+const { topic: topicSlug, slug } = Astro.params;
+const section = getSectionBySlug('blog');
+const topic = getTopicBySlug('blog', topicSlug!);
+const postData = getContentBySlug('blog', topicSlug!, slug!);
+
+if (!postData || !topic) {
+  return Astro.redirect('/404');
+}
+
+const { meta, content } = postData;
+
+// Parse markdown content
+const { compile } = await import('@mdx-js/mdx');
+
+// Generate breadcrumbs
+const breadcrumbs = [
+  { label: section?.name || 'Blog', href: '/blog' },
+  { label: topic.name, href: `/blog/${topicSlug}` },
+  { label: meta.title, href: `/blog/${topicSlug}/${slug}` }
+];
+
+// Generate side panel from headings if not provided
+let sidePanel = meta.sidePanel || [];
+if (sidePanel.length === 0) {
+  const headingRegex = /^##\s+(.+)$/gm;
+  let match;
+  while ((match = headingRegex.exec(content)) !== null) {
+    const heading = match[1];
+    const anchor = '#' + heading.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    sidePanel.push({ heading, anchor });
+  }
+}
+---
+
+<ArticleLayout
+  title={meta.title}
+  description={meta.description}
+  date={meta.date}
+  updated={meta.updated}
+  readingTime={meta.readingTime}
+  showSidePanel={section?.features?.sidePanel ?? false}
+  showComments={section?.features?.comments ?? false}
+  showReactions={section?.features?.reactions ?? false}
+  showBreadcrumbs={section?.features?.breadcrumbs ?? true}
+  showDate={section?.features?.showDate ?? true}
+  sidePanel={sidePanel}
+  breadcrumbs={breadcrumbs}
+  asides={meta.asides || []}
+>
+  <Fragment set:html={content.replace(/^#.*$/m, '').trim().split('\n').map(line => {
+    if (line.startsWith('## ')) {
+      const text = line.slice(3);
+      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      return `<h2 id="${id}">${text}</h2>`;
+    }
+    if (line.startsWith('### ')) {
+      const text = line.slice(4);
+      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      return `<h3 id="${id}">${text}</h3>`;
+    }
+    if (line.startsWith('```')) {
+      return line;
+    }
+    if (line.trim() === '') {
+      return '';
+    }
+    if (!line.startsWith('<') && !line.startsWith('-') && !line.startsWith('*') && !line.match(/^\d+\./)) {
+      return `<p>${line}</p>`;
+    }
+    return line;
+  }).join('\n')} />
+</ArticleLayout>

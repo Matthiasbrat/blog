@@ -1,0 +1,58 @@
+---
+import ListLayout from '../../../layouts/ListLayout.astro';
+import PostItem from '../../../components/PostItem.astro';
+import { getSectionBySlug } from '../../../lib/sections';
+import { getTopicBySlug, getContentForTopic } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const { getTopicsForSection } = await import('../../../lib/content');
+  const topics = getTopicsForSection('blog');
+  
+  return topics.map(topic => ({
+    params: { topic: topic.slug }
+  }));
+}
+
+const { topic: topicSlug } = Astro.params;
+const section = getSectionBySlug('blog');
+const topic = getTopicBySlug('blog', topicSlug!);
+const posts = getContentForTopic('blog', topicSlug!);
+
+if (!topic) {
+  return Astro.redirect('/404');
+}
+---
+
+<ListLayout title={topic.name} description={topic.description}>
+  <ul class="post-list">
+    {posts.map(post => (
+      <PostItem 
+        title={post.title} 
+        href={`/blog/${topicSlug}/${post.slug}`}
+        date={post.date}
+        readingTime={post.readingTime}
+      />
+    ))}
+  </ul>
+  
+  <a href="/blog" class="back-link">← Back to all topics</a>
+</ListLayout>
+
+<style>
+  .post-list {
+    margin-bottom: var(--space-xl);
+  }
+  
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+    width: 100%;
+  }
+  
+  .back-link:hover {
+    color: var(--color-accent);
+  }
+</style>

@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Search">
+  <div class="search-page">
+    <h1>Search</h1>
+    <div class="search-container">
+      <input 
+        type="search" 
+        id="search-input" 
+        placeholder="Search posts and documentation..."
+        autofocus
+      />
+    </div>
+    <div id="search-results" class="search-results">
+      <p class="search-hint">Start typing to search...</p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .search-page {
+    max-width: var(--max-width-content);
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-md);
+  }
+  
+  h1 {
+    margin-bottom: var(--space-lg);
+  }
+  
+  .search-container {
+    margin-bottom: var(--space-xl);
+  }
+  
+  #search-input {
+    width: 100%;
+    padding: var(--space-md);
+    font-size: 1.125rem;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-alt);
+    color: var(--color-text);
+    transition: border-color var(--transition-fast);
+  }
+  
+  #search-input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+  
+  #search-input::placeholder {
+    color: var(--color-text-muted);
+  }
+  
+  .search-results {
+    min-height: 200px;
+  }
+  
+  .search-hint {
+    color: var(--color-text-muted);
+    text-align: center;
+    padding: var(--space-xl);
+  }
+  
+  .search-results :global(.result-item) {
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .search-results :global(.result-item:last-child) {
+    border-bottom: none;
+  }
+  
+  .search-results :global(.result-title) {
+    font-weight: 500;
+    margin-bottom: var(--space-xs);
+  }
+  
+  .search-results :global(.result-excerpt) {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+  
+  .search-results :global(.result-excerpt mark) {
+    background: rgba(37, 99, 235, 0.2);
+    color: var(--color-text);
+  }
+</style>
+
+<script>
+  // Simple client-side search
+  // In production, this would use Pagefind
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const resultsContainer = document.getElementById('search-results');
+  
+  // Simulated search data - in production loaded from Pagefind index
+  const searchData = [
+    { title: 'Async/Await in JavaScript', url: '/blog/javascript/async-await', excerpt: 'Learn how to use async/await for cleaner asynchronous code' },
+    { title: 'Understanding Ownership', url: '/blog/rust/ownership', excerpt: 'Deep dive into Rust\'s ownership system' },
+    { title: 'Installation Guide', url: '/docs/getting-started/installation', excerpt: 'Get started with the installation process' },
+    { title: 'Quick Start', url: '/docs/getting-started/quick-start', excerpt: 'Build your first project in minutes' }
+  ];
+  
+  let debounceTimer: number;
+  
+  searchInput?.addEventListener('input', (e) => {
+    clearTimeout(debounceTimer);
+    debounceTimer = window.setTimeout(() => {
+      const query = (e.target as HTMLInputElement).value.toLowerCase().trim();
+      
+      if (!query) {
+        resultsContainer!.innerHTML = '<p class="search-hint">Start typing to search...</p>';
+        return;
+      }
+      
+      const results = searchData.filter(item => 
+        item.title.toLowerCase().includes(query) || 
+        item.excerpt.toLowerCase().includes(query)
+      );
+      
+      if (results.length === 0) {
+        resultsContainer!.innerHTML = '<p class="search-hint">No results found.</p>';
+        return;
+      }
+      
+      resultsContainer!.innerHTML = results.map(result => `
+        <a href="${result.url}" class="result-item" style="display: block; text-decoration: none; color: inherit;">
+          <div class="result-title">${highlightMatch(result.title, query)}</div>
+          <div class="result-excerpt">${highlightMatch(result.excerpt, query)}</div>
+        </a>
+      `).join('');
+    }, 200);
+  });
+  
+  function highlightMatch(text: string, query: string): string {
+    const regex = new RegExp(`(${query})`, 'gi');
+    return text.replace(regex, '<mark>$1</mark>');
+  }
+</script>
