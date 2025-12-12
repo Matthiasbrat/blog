@@ -10,42 +10,21 @@ const { title, description } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
-  <div class="grid-layout">
-    <header class="grid-header">
-      <h1>{title}</h1>
-      {description && <p class="grid-description">{description}</p>}
-    </header>
-    
-    <div class="grid-container">
-      <slot />
-    </div>
-  </div>
+  <header class="page-header">
+    <h1>{title}</h1>
+    {description && <p class="description">{description}</p>}
+  </header>
+  
+  <slot />
 </BaseLayout>
 
 <style>
-  .grid-layout {
-    max-width: var(--max-width-wide);
-    margin: 0 auto;
-    padding: 0 var(--space-md);
-  }
-  
-  .grid-header {
+  .page-header {
     margin-bottom: var(--space-xl);
-    max-width: var(--max-width-content);
   }
   
-  .grid-header h1 {
-    margin-bottom: var(--space-sm);
-  }
-  
-  .grid-description {
-    font-size: 1.125rem;
+  .description {
     color: var(--color-text-muted);
-  }
-  
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: var(--space-lg);
+    margin-top: var(--space-sm);
   }
 </style>
