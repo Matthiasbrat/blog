@@ -39,3 +39,25 @@
     - type: "github"
       url: "https://github.com/davidkim"
   order: 4
+
+- name: "Alex Thompson"
+  title: "Engineering Manager at StartupX"
+  description: "An exceptional technical leader who balances engineering excellence with team growth. Helped shape my approach to system design."
+  links:
+    - type: "linkedin"
+      url: "https://linkedin.com/in/alexthompson"
+    - type: "twitter"
+      url: "https://twitter.com/alexthompson"
+  order: 5
+
+- name: "Priya Patel"
+  title: "Staff Software Engineer at BigTech"
+  description: "Brilliant problem solver with deep expertise in distributed systems. Her code reviews taught me more than any course."
+  links:
+    - type: "linkedin"
+      url: "https://linkedin.com/in/priyapatel"
+    - type: "github"
+      url: "https://github.com/priyapatel"
+    - type: "website"
+      url: "https://priya.dev"
+  order: 6
