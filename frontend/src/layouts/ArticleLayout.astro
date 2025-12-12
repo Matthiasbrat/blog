@@ -1,58 +1,15 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import Comments from '../components/features/Comments.astro';
 
 interface Props {
   title: string;
   description?: string;
-  date?: Date;
-  updated?: Date;
-  showComments?: boolean;
-  showDate?: boolean;
+  article?: boolean;
 }
 
-const {
-  title,
-  description,
-  date,
-  updated,
-  showComments = false,
-  showDate = true,
-} = Astro.props;
-
-function formatDate(d: Date): string {
-  return d.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-}
+const { title, description, article = false } = Astro.props;
 ---
 
-<BaseLayout 
-  title={title} 
-  description={description}
-  article={true}
-  publishDate={date}
-  updatedDate={updated}
->
-  <article>
-    <header>
-      <h1>{title}</h1>
-      {showDate && date && (
-        <p class="article-meta">
-          <time datetime={date.toISOString()}>{formatDate(date)}</time>
-          {updated && updated.getTime() !== date?.getTime() && (
-            <span> · Updated {formatDate(updated)}</span>
-          )}
-        </p>
-      )}
-    </header>
-    
-    <div class="content">
-      <slot />
-    </div>
-    
-    {showComments && <Comments />}
-  </article>
+<BaseLayout title={title} description={description} article={article}>
+  <slot />
 </BaseLayout>
