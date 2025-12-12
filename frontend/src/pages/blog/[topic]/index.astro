@@ -1,46 +1,55 @@
 ---
 import BaseLayout from '../../../layouts/ListLayout.astro';
-import PostItem from '../../../components/PostItem.astro';
 import { getTopicBySlug, getContentForTopic } from '../../../lib/content';
 
 export async function getStaticPaths() {
   const { getTopicsForSection } = await import('../../../lib/content');
   const topics = getTopicsForSection('blog');
-  
-  return topics.map(topic => ({
-    params: { topic: topic.slug }
-  }));
+  return topics.map(topic => ({ params: { topic: topic.slug } }));
 }
 
 const { topic: topicSlug } = Astro.params;
 const topic = getTopicBySlug('blog', topicSlug!);
 const posts = getContentForTopic('blog', topicSlug!);
+
+const topicIcons: Record<string, string> = {
+  javascript: '⚡',
+  typescript: '🔷',
+  rust: '🦀',
+};
+
+function formatDate(d: Date): string {
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
 ---
 
 <BaseLayout title={topic?.name || topicSlug} description={topic?.description}>
-  <ul class="posts">
-    {posts.map(post => (
-      <PostItem 
-        title={post.title} 
-        href={`/blog/${topicSlug}/${post.slug}`}
-        date={post.date}
-      />
-    ))}
-  </ul>
+  <section class="section">
+    <div class="container">
+      <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-md);">
+        <span style="font-size: 2.5rem;">{topicIcons[topicSlug!] || '📝'}</span>
+        <div>
+          <a href="/blog" style="font-size: 0.875rem; color: var(--text-tertiary);">← Back to Blog</a>
+          <h1 style="font-size: clamp(2rem, 4vw, 2.75rem); margin-top: var(--space-xs);">{topic?.name}</h1>
+        </div>
+      </div>
+      <p style="color: var(--text-secondary); font-size: 1.125rem; max-width: 550px;">{topic?.description}</p>
+    </div>
+  </section>
   
-  <p class="back"><a href="/blog">← All topics</a></p>
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <ul class="cards-grid">
+        {posts.map(post => (
+          <li>
+            <a href={`/blog/${topicSlug}/${post.slug}`} class="post-card">
+              <div class="post-card-date">{formatDate(post.date)}</div>
+              <h3>{post.title}</h3>
+              <p class="post-card-excerpt">{post.description}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
 </BaseLayout>
-
-<style>
-  .posts {
-    margin-bottom: var(--space-xl);
-  }
-  
-  .back {
-    font-size: 0.9375rem;
-  }
-  
-  .back a {
-    color: var(--color-text-muted);
-  }
-</style>
