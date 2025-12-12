@@ -1,49 +1,25 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import SidePanel from '../components/features/SidePanel.astro';
-import Breadcrumbs from '../components/features/Breadcrumbs.astro';
 import Comments from '../components/features/Comments.astro';
 
 interface Props {
   title: string;
   description?: string;
-  date?: Date;
   updated?: Date;
-  readingTime?: number;
-  showSidePanel?: boolean;
   showComments?: boolean;
-  showBreadcrumbs?: boolean;
-  showTopicNav?: boolean;
   showPrevNext?: boolean;
-  pdf?: string;
-  sidePanel?: Array<{
-    heading: string;
-    anchor: string;
-    children?: Array<{ heading: string; anchor: string }>;
-  }>;
-  breadcrumbs?: Array<{ label: string; href: string }>;
   prevPost?: { title: string; href: string };
   nextPost?: { title: string; href: string };
-  relatedDocs?: Array<{ title: string; href: string }>;
 }
 
 const {
   title,
   description,
-  date,
   updated,
-  readingTime,
-  showSidePanel = true,
   showComments = true,
-  showBreadcrumbs = true,
-  showTopicNav = false,
   showPrevNext = true,
-  pdf,
-  sidePanel = [],
-  breadcrumbs = [],
   prevPost,
   nextPost,
-  relatedDocs = []
 } = Astro.props;
 
 function formatDate(d: Date): string {
@@ -59,293 +35,90 @@ function formatDate(d: Date): string {
   title={title} 
   description={description}
   article={true}
-  publishDate={date}
   updatedDate={updated}
 >
-  <div class="docs-layout">
-    {showSidePanel && sidePanel.length > 0 && (
-      <aside class="side-panel-container">
-        <SidePanel items={sidePanel} />
-      </aside>
+  <article>
+    <header class="doc-header">
+      <h1>{title}</h1>
+      {updated && (
+        <p class="meta">Last updated: {formatDate(updated)}</p>
+      )}
+    </header>
+    
+    <div class="content">
+      <slot />
+    </div>
+    
+    {showPrevNext && (prevPost || nextPost) && (
+      <nav class="prev-next">
+        {prevPost && (
+          <a href={prevPost.href} class="prev">← {prevPost.title}</a>
+        )}
+        {nextPost && (
+          <a href={nextPost.href} class="next">{nextPost.title} →</a>
+        )}
+      </nav>
     )}
     
-    <article class="docs-content">
-      {showBreadcrumbs && breadcrumbs.length > 0 && (
-        <Breadcrumbs items={breadcrumbs} />
-      )}
-      
-      <header class="docs-header">
-        <h1>{title}</h1>
-        {description && <p class="docs-description">{description}</p>}
-        
-        <div class="docs-meta">
-          {updated && (
-            <span class="updated">Last updated: {formatDate(updated)}</span>
-          )}
-          {readingTime && (
-            <span class="reading-time">{readingTime} min read</span>
-          )}
-        </div>
-      </header>
-      
-      {pdf && (
-        <div class="pdf-viewer">
-          <div class="pdf-toolbar">
-            <span class="pdf-label">PDF Document</span>
-            <a href={pdf} target="_blank" class="pdf-download">Open in new tab ↗</a>
-          </div>
-          <iframe src={pdf} title="PDF Document"></iframe>
-        </div>
-      )}
-      
-      <div class="docs-body prose">
-        <slot />
-      </div>
-      
-      {showPrevNext && (prevPost || nextPost) && (
-        <nav class="prev-next-nav">
-          {prevPost && (
-            <a href={prevPost.href} class="prev-link">
-              <span class="nav-label">← Previous</span>
-              <span class="nav-title">{prevPost.title}</span>
-            </a>
-          )}
-          {nextPost && (
-            <a href={nextPost.href} class="next-link">
-              <span class="nav-label">Next →</span>
-              <span class="nav-title">{nextPost.title}</span>
-            </a>
-          )}
-        </nav>
-      )}
-      
-      {showComments && (
-        <Comments />
-      )}
-    </article>
-    
-    {showTopicNav && relatedDocs.length > 0 && (
-      <aside class="related-docs">
-        <h3>Related Docs</h3>
-        <ul>
-          {relatedDocs.map(doc => (
-            <li><a href={doc.href}>{doc.title}</a></li>
-          ))}
-        </ul>
-      </aside>
-    )}
-  </div>
+    {showComments && <Comments />}
+  </article>
 </BaseLayout>
 
 <style>
-  .docs-layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-xl);
-    max-width: var(--max-width-wide);
-    margin: 0 auto;
-    padding: 0 var(--space-md);
-  }
-  
-  @media (min-width: 1024px) {
-    .docs-layout {
-      grid-template-columns: 200px minmax(0, 1fr);
-    }
-  }
-  
-  @media (min-width: 1280px) {
-    .docs-layout {
-      grid-template-columns: 200px minmax(0, 1fr) 200px;
-    }
-  }
-  
-  .side-panel-container {
-    display: none;
-  }
-  
-  @media (min-width: 1024px) {
-    .side-panel-container {
-      display: block;
-    }
-  }
-  
-  .related-docs {
-    display: none;
-  }
-  
-  @media (min-width: 1280px) {
-    .related-docs {
-      display: block;
-      position: sticky;
-      top: calc(var(--space-xl) + 60px);
-    }
-  }
-  
-  .related-docs h3 {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-md);
-  }
-  
-  .related-docs ul {
-    font-size: 0.875rem;
-  }
-  
-  .related-docs li {
-    margin-bottom: var(--space-sm);
-  }
-  
-  .related-docs a {
-    color: var(--color-text-muted);
-  }
-  
-  .related-docs a:hover {
-    color: var(--color-text);
-  }
-  
-  .docs-content {
-    max-width: var(--max-width-content);
-  }
-  
-  .docs-header {
+  .doc-header {
     margin-bottom: var(--space-xl);
   }
   
-  .docs-header h1 {
-    margin-bottom: var(--space-sm);
-  }
-  
-  .docs-description {
-    font-size: 1.125rem;
+  .meta {
+    font-size: 0.9375rem;
     color: var(--color-text-muted);
-    margin-bottom: var(--space-md);
+    margin-top: var(--space-sm);
   }
   
-  .docs-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-md);
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-  }
-  
-  .reading-time::before {
-    content: '•';
-    margin-right: var(--space-sm);
-  }
-  
-  .pdf-viewer {
-    margin: var(--space-xl) 0;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-  }
-  
-  .pdf-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--space-sm) var(--space-md);
-    background: var(--color-bg-alt);
-    border-bottom: 1px solid var(--color-border);
-  }
-  
-  .pdf-label {
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-  
-  .pdf-download {
-    font-size: 0.875rem;
-  }
-  
-  .pdf-viewer iframe {
-    width: 100%;
-    height: 600px;
-    border: none;
-  }
-  
-  .docs-body {
-    line-height: 1.8;
-  }
-  
-  .docs-body :global(h2) {
+  .content :global(h2) {
     margin-top: var(--space-xl);
     margin-bottom: var(--space-md);
-    padding-top: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-xs);
   }
   
-  .docs-body :global(h3) {
+  .content :global(h3) {
     margin-top: var(--space-lg);
     margin-bottom: var(--space-sm);
   }
   
-  .docs-body :global(p) {
-    margin-bottom: var(--space-md);
-  }
-  
-  .docs-body :global(ul),
-  .docs-body :global(ol) {
+  .content :global(ul),
+  .content :global(ol) {
     margin-bottom: var(--space-md);
     padding-left: var(--space-lg);
   }
   
-  .docs-body :global(li) {
-    margin-bottom: var(--space-xs);
-  }
-  
-  .docs-body :global(ul) {
+  .content :global(ul) {
     list-style: disc;
   }
   
-  .docs-body :global(ol) {
+  .content :global(ol) {
     list-style: decimal;
   }
   
-  .prev-next-nav {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-md);
-    margin-top: var(--space-2xl);
-    padding-top: var(--space-xl);
-    border-top: 1px solid var(--color-border);
+  .content :global(li) {
+    margin-bottom: var(--space-xs);
   }
   
-  .prev-link,
-  .next-link {
+  .prev-next {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-    padding: var(--space-md);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    transition: border-color var(--transition-fast);
+    justify-content: space-between;
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+    font-size: 0.9375rem;
   }
   
-  .prev-link:hover,
-  .next-link:hover {
-    border-color: var(--color-accent);
-    text-decoration: none;
-  }
-  
-  .next-link {
-    text-align: right;
-    grid-column: 2;
-  }
-  
-  .nav-label {
-    font-size: 0.75rem;
+  .prev-next a {
     color: var(--color-text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
   }
   
-  .nav-title {
-    font-weight: 500;
-    color: var(--color-text);
+  .next {
+    margin-left: auto;
   }
 </style>
