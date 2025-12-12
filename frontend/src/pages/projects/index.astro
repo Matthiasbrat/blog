@@ -1,24 +1,37 @@
 ---
-import GridLayout from '../../layouts/GridLayout.astro';
-import TopicCard from '../../components/TopicCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getSectionBySlug } from '../../lib/sections';
 import { getFlatContent } from '../../lib/content';
 
 const section = getSectionBySlug('projects');
 const projects = getFlatContent('projects');
-
-if (!section) {
-  return Astro.redirect('/404');
-}
 ---
 
-<GridLayout title={section.name} description={section.description}>
-  {projects.map(project => (
-    <TopicCard
-      title={project.title}
-      description={project.description}
-      href={`/projects/${project.slug}`}
-      banner={project.banner}
-    />
-  ))}
-</GridLayout>
+<BaseLayout title="Projects" description={section?.description}>
+  <h1>Projects</h1>
+  <p class="description">{section?.description}</p>
+  
+  <ul class="projects">
+    {projects.map(project => (
+      <li>
+        <a href={`/projects/${project.slug}`}>{project.title}</a>
+        {project.description && <span class="desc"> — {project.description}</span>}
+      </li>
+    ))}
+  </ul>
+</BaseLayout>
+
+<style>
+  .description {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-xl);
+  }
+  
+  .projects li {
+    margin-bottom: var(--space-sm);
+  }
+  
+  .desc {
+    color: var(--color-text-muted);
+  }
+</style>
