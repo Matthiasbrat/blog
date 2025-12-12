@@ -1,8 +1,6 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
-import { getSiteConfig } from '../lib/sections';
-import Nav from '../components/Nav.astro';
-import Footer from '../components/Footer.astro';
+import { getSiteConfig, getNavItems } from '../lib/sections';
 import '../styles/global.css';
 
 interface Props {
@@ -11,15 +9,20 @@ interface Props {
   article?: boolean;
   publishDate?: Date;
   updatedDate?: Date;
+  showSidebar?: boolean;
 }
 
 const siteConfig = getSiteConfig();
+const navItems = getNavItems();
+const currentPath = Astro.url.pathname;
+
 const { 
   title = siteConfig.site.title,
   description = siteConfig.site.description,
   article = false,
   publishDate,
-  updatedDate
+  updatedDate,
+  showSidebar = true
 } = Astro.props;
 
 const pageTitle = title === siteConfig.site.title ? title : `${title} — ${siteConfig.site.title}`;
@@ -35,6 +38,11 @@ const canonicalUrl = new URL(Astro.url.pathname, siteConfig.site.url);
   <meta name="description" content={description}>
   <link rel="canonical" href={canonicalUrl}>
   
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&family=Source+Sans+Pro:wght@400;600&family=Source+Serif+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  
   <!-- Open Graph -->
   <meta property="og:title" content={title}>
   <meta property="og:description" content={description}>
@@ -44,23 +52,42 @@ const canonicalUrl = new URL(Astro.url.pathname, siteConfig.site.url);
   {article && publishDate && (
     <meta property="article:published_time" content={publishDate.toISOString()}>
   )}
-  {article && updatedDate && (
-    <meta property="article:modified_time" content={updatedDate.toISOString()}>
-  )}
   
   <ViewTransitions />
 </head>
 <body>
-  <Nav />
-  <main class="container">
-    <slot />
-  </main>
-  <Footer />
+  <div class="site-layout">
+    {showSidebar && (
+      <aside class="sidebar">
+        <header class="sidebar-header">
+          <a href="/" class="site-title">{siteConfig.site.title}</a>
+        </header>
+        <nav class="sidebar-nav">
+          <ul>
+            {navItems.map(item => (
+              <li>
+                <a 
+                  href={item.href}
+                  class:list={{ active: currentPath.startsWith(item.href) }}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+    )}
+    
+    <main class="main-content">
+      <div class="content-wrapper">
+        <slot />
+      </div>
+      
+      <footer class="footer">
+        © {new Date().getFullYear()} {siteConfig.site.author}
+      </footer>
+    </main>
+  </div>
 </body>
 </html>
-
-<style>
-  main {
-    min-height: 60vh;
-  }
-</style>
