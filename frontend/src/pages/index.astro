@@ -1,211 +1,68 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getSiteConfig, getAllSections } from '../lib/sections';
-import { getTopicsForSection, getContentForTopic, getFlatContent } from '../lib/content';
-import TopicCard from '../components/TopicCard.astro';
+import { getSiteConfig } from '../lib/sections';
+import { getTopicsForSection, getContentForTopic } from '../lib/content';
 import PostItem from '../components/PostItem.astro';
 
 const siteConfig = getSiteConfig();
-const sections = getAllSections().filter(s => s.showInNav);
 
 // Get recent blog posts
 const blogTopics = getTopicsForSection('blog');
 let recentPosts: any[] = [];
 for (const topic of blogTopics) {
   const posts = getContentForTopic('blog', topic.slug);
-  recentPosts = [...recentPosts, ...posts.map(p => ({ ...p, topic: topic.slug, topicName: topic.name }))];
+  recentPosts = [...recentPosts, ...posts.map(p => ({ ...p, topic: topic.slug }))];
 }
 recentPosts = recentPosts
   .sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0))
-  .slice(0, 5);
-
-// Get recent docs
-const docsTopics = getTopicsForSection('docs');
-let recentDocs: any[] = [];
-for (const topic of docsTopics) {
-  const docs = getContentForTopic('docs', topic.slug);
-  recentDocs = [...recentDocs, ...docs.map(d => ({ ...d, topic: topic.slug, topicName: topic.name }))];
-}
-recentDocs = recentDocs.slice(0, 5);
+  .slice(0, 10);
 ---
 
 <BaseLayout>
-  <div class="home">
-    <section class="hero">
-      <div class="hero-content">
-        <h1 class="hero-title">Hi, I'm <span class="highlight">{siteConfig.site.author}</span></h1>
-        <p class="hero-description">
-          Welcome to my corner of the internet. I write about programming, 
-          share documentation, and connect with great people.
-        </p>
-        <div class="hero-links">
-          <a href="/blog" class="hero-btn primary">Read the Blog</a>
-          <a href="/docs" class="hero-btn secondary">Browse Docs</a>
-        </div>
-      </div>
-    </section>
-    
-    <section class="recent-section">
-      <div class="section-header">
-        <h2>Recent Posts</h2>
-        <a href="/blog" class="view-all">View all →</a>
-      </div>
-      <ul class="post-list">
-        {recentPosts.map(post => (
-          <PostItem 
-            title={post.title} 
-            href={`/blog/${post.topic}/${post.slug}`}
-            date={post.date}
-            readingTime={post.readingTime}
-          />
-        ))}
-      </ul>
-    </section>
-    
-    <section class="recent-section">
-      <div class="section-header">
-        <h2>Documentation</h2>
-        <a href="/docs" class="view-all">View all →</a>
-      </div>
-      <ul class="post-list">
-        {recentDocs.map(doc => (
-          <PostItem 
-            title={doc.title} 
-            href={`/docs/${doc.topic}/${doc.slug}`}
-            readingTime={doc.readingTime}
-          />
-        ))}
-      </ul>
-    </section>
-    
-    <section class="topics-section">
-      <h2>Explore Topics</h2>
-      <div class="topics-grid">
-        {blogTopics.map(topic => (
-          <TopicCard
-            title={topic.name}
-            description={topic.description}
-            href={`/blog/${topic.slug}`}
-            banner={topic.banner}
-            meta={`${getContentForTopic('blog', topic.slug).length} posts`}
-          />
-        ))}
-      </div>
-    </section>
-  </div>
+  <section class="intro">
+    <h1>{siteConfig.site.title}</h1>
+    <p>
+      Welcome. I write about programming, share documentation, and connect with great people.
+      Browse the <a href="/blog">blog</a>, read the <a href="/docs">docs</a>, 
+      or see <a href="/referrals">people I recommend</a>.
+    </p>
+  </section>
+  
+  <section class="recent">
+    <h2>Recent Writing</h2>
+    <ul class="post-list">
+      {recentPosts.map(post => (
+        <PostItem 
+          title={post.title} 
+          href={`/blog/${post.topic}/${post.slug}`}
+          date={post.date}
+        />
+      ))}
+    </ul>
+    <p><a href="/blog">All posts →</a></p>
+  </section>
 </BaseLayout>
 
 <style>
-  .home {
-    max-width: var(--max-width-content);
-    margin: 0 auto;
-    padding: 0 var(--space-md);
+  .intro {
+    margin-bottom: var(--space-xl);
   }
   
-  .hero {
-    padding: var(--space-2xl) 0;
-  }
-  
-  .hero-title {
-    font-size: 2.5rem;
+  .intro h1 {
     margin-bottom: var(--space-md);
   }
   
-  @media (min-width: 640px) {
-    .hero-title {
-      font-size: 3rem;
-    }
+  .intro p {
+    font-size: 1.125rem;
   }
   
-  .highlight {
-    color: var(--color-accent);
-  }
-  
-  .hero-description {
-    font-size: 1.25rem;
-    color: var(--color-text-muted);
-    line-height: 1.6;
+  .recent h2 {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-xs);
     margin-bottom: var(--space-lg);
-    max-width: 50ch;
-  }
-  
-  .hero-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-md);
-  }
-  
-  .hero-btn {
-    display: inline-flex;
-    align-items: center;
-    padding: var(--space-sm) var(--space-lg);
-    border-radius: var(--radius-md);
-    font-weight: 500;
-    text-decoration: none;
-    transition: background var(--transition-fast), color var(--transition-fast);
-  }
-  
-  .hero-btn.primary {
-    background: var(--color-text);
-    color: var(--color-bg);
-  }
-  
-  .hero-btn.primary:hover {
-    background: var(--color-accent);
-  }
-  
-  .hero-btn.secondary {
-    background: transparent;
-    color: var(--color-text);
-    border: 1px solid var(--color-border);
-  }
-  
-  .hero-btn.secondary:hover {
-    border-color: var(--color-text);
-  }
-  
-  .recent-section {
-    padding: var(--space-xl) 0;
-    border-top: 1px solid var(--color-border);
-  }
-  
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: var(--space-lg);
-  }
-  
-  .section-header h2 {
-    font-size: 1.5rem;
-  }
-  
-  .view-all {
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-  }
-  
-  .view-all:hover {
-    color: var(--color-accent);
   }
   
   .post-list {
-    list-style: none;
-  }
-  
-  .topics-section {
-    padding: var(--space-xl) 0;
-    border-top: 1px solid var(--color-border);
-  }
-  
-  .topics-section h2 {
-    font-size: 1.5rem;
     margin-bottom: var(--space-lg);
-  }
-  
-  .topics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: var(--space-md);
   }
 </style>
