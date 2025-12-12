@@ -14,7 +14,8 @@ export default defineConfig({
     server: {
       watch: {
         usePolling: true
-      }
+      },
+      allowedHosts: ['be18157c-da9a-486d-a64d-336826ccc7b5.preview.emergentagent.com', 'localhost']
     }
   },
   markdown: {
