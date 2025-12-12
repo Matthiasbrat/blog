@@ -1,0 +1,97 @@
+---
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+import { getSectionBySlug } from '../../../../lib/sections';
+import { getTopicBySlug, getContentForTopic, getContentBySlug } from '../../../../lib/content';
+
+export async function getStaticPaths() {
+  const { getTopicsForSection, getContentForTopic } = await import('../../../../lib/content');
+  const topics = getTopicsForSection('docs');
+  
+  const paths = [];
+  for (const topic of topics) {
+    const docs = getContentForTopic('docs', topic.slug);
+    for (const doc of docs) {
+      paths.push({
+        params: { topic: topic.slug, slug: doc.slug }
+      });
+    }
+  }
+  
+  return paths;
+}
+
+const { topic: topicSlug, slug } = Astro.params;
+const section = getSectionBySlug('docs');
+const topic = getTopicBySlug('docs', topicSlug!);
+const docData = getContentBySlug('docs', topicSlug!, slug!);
+
+if (!docData || !topic) {
+  return Astro.redirect('/404');
+}
+
+const { meta, content } = docData;
+
+// Generate breadcrumbs
+const breadcrumbs = [
+  { label: section?.name || 'Docs', href: '/docs' },
+  { label: topic.name, href: `/docs/${topicSlug}` },
+  { label: meta.title, href: `/docs/${topicSlug}/${slug}` }
+];
+
+// Generate side panel from headings if not provided
+let sidePanel = meta.sidePanel || [];
+if (sidePanel.length === 0) {
+  const headingRegex = /^##\s+(.+)$/gm;
+  let match;
+  while ((match = headingRegex.exec(content)) !== null) {
+    const heading = match[1];
+    const anchor = '#' + heading.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    sidePanel.push({ heading, anchor });
+  }
+}
+
+// Get prev/next docs
+const allDocs = getContentForTopic('docs', topicSlug!);
+const currentIndex = allDocs.findIndex(d => d.slug === slug);
+const prevDoc = currentIndex > 0 ? allDocs[currentIndex - 1] : null;
+const nextDoc = currentIndex < allDocs.length - 1 ? allDocs[currentIndex + 1] : null;
+---
+
+<DocsLayout
+  title={meta.title}
+  description={meta.description}
+  updated={meta.updated || meta.date}
+  readingTime={meta.readingTime}
+  showSidePanel={section?.features?.sidePanel ?? true}
+  showComments={section?.features?.comments ?? true}
+  showBreadcrumbs={section?.features?.breadcrumbs ?? true}
+  showPrevNext={section?.features?.prevNext ?? true}
+  pdf={meta.pdf}
+  sidePanel={sidePanel}
+  breadcrumbs={breadcrumbs}
+  prevPost={prevDoc ? { title: prevDoc.title, href: `/docs/${topicSlug}/${prevDoc.slug}` } : undefined}
+  nextPost={nextDoc ? { title: nextDoc.title, href: `/docs/${topicSlug}/${nextDoc.slug}` } : undefined}
+>
+  <Fragment set:html={content.replace(/^#.*$/m, '').trim().split('\n').map(line => {
+    if (line.startsWith('## ')) {
+      const text = line.slice(3);
+      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      return `<h2 id="${id}">${text}</h2>`;
+    }
+    if (line.startsWith('### ')) {
+      const text = line.slice(4);
+      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      return `<h3 id="${id}">${text}</h3>`;
+    }
+    if (line.startsWith('```')) {
+      return line;
+    }
+    if (line.trim() === '') {
+      return '';
+    }
+    if (!line.startsWith('<') && !line.startsWith('-') && !line.startsWith('*') && !line.match(/^\d+\./)) {
+      return `<p>${line}</p>`;
+    }
+    return line;
+  }).join('\n')} />
+</DocsLayout>

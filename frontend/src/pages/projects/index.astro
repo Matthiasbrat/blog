@@ -1,0 +1,24 @@
+---
+import GridLayout from '../../layouts/GridLayout.astro';
+import TopicCard from '../../components/TopicCard.astro';
+import { getSectionBySlug } from '../../lib/sections';
+import { getFlatContent } from '../../lib/content';
+
+const section = getSectionBySlug('projects');
+const projects = getFlatContent('projects');
+
+if (!section) {
+  return Astro.redirect('/404');
+}
+---
+
+<GridLayout title={section.name} description={section.description}>
+  {projects.map(project => (
+    <TopicCard
+      title={project.title}
+      description={project.description}
+      href={`/projects/${project.slug}`}
+      banner={project.banner}
+    />
+  ))}
+</GridLayout>

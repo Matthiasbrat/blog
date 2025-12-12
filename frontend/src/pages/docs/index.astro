@@ -1,0 +1,28 @@
+---
+import GridLayout from '../../layouts/GridLayout.astro';
+import TopicCard from '../../components/TopicCard.astro';
+import { getSectionBySlug } from '../../lib/sections';
+import { getTopicsForSection, getContentForTopic } from '../../lib/content';
+
+const section = getSectionBySlug('docs');
+const topics = getTopicsForSection('docs');
+
+if (!section) {
+  return Astro.redirect('/404');
+}
+---
+
+<GridLayout title={section.name} description={section.description}>
+  {topics.map(topic => {
+    const docs = getContentForTopic('docs', topic.slug);
+    return (
+      <TopicCard
+        title={topic.name}
+        description={topic.description}
+        href={`/docs/${topic.slug}`}
+        banner={topic.banner}
+        meta={`${docs.length} docs`}
+      />
+    );
+  })}
+</GridLayout>
