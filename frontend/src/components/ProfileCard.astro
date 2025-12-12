@@ -9,33 +9,17 @@ interface Props {
 const { name, title, description, links = [] } = Astro.props;
 ---
 
-<li class="person">
-  <strong>{name}</strong>, {title}
-  {description && <span class="description"> — {description}</span>}
+<li class="person-item">
+  <div>
+    <span class="person-name">{name}</span>
+    <span class="person-title"> · {title}</span>
+  </div>
+  {description && <p class="person-description">{description}</p>}
   {links.length > 0 && (
-    <span class="links">
-      [{links.map((link, i) => (
-        <><a href={link.url} target="_blank" rel="noopener">{link.type}</a>{i < links.length - 1 && ', '}</>
-      ))}]
-    </span>
+    <div class="person-links">
+      {links.map(link => (
+        <a href={link.url} target="_blank" rel="noopener">{link.type}</a>
+      ))}
+    </div>
   )}
 </li>
-
-<style>
-  .person {
-    margin-bottom: var(--space-md);
-    line-height: 1.5;
-  }
-  
-  .description {
-    color: var(--color-text-muted);
-  }
-  
-  .links {
-    font-size: 0.875rem;
-  }
-  
-  .links a {
-    color: var(--color-text-muted);
-  }
-</style>
