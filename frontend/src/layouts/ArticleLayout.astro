@@ -1,0 +1,240 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import SidePanel from '../components/features/SidePanel.astro';
+import Breadcrumbs from '../components/features/Breadcrumbs.astro';
+import Comments from '../components/features/Comments.astro';
+import Reactions from '../components/features/Reactions.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  date?: Date;
+  updated?: Date;
+  readingTime?: number;
+  showSidePanel?: boolean;
+  showComments?: boolean;
+  showReactions?: boolean;
+  showBreadcrumbs?: boolean;
+  showDate?: boolean;
+  sidePanel?: Array<{
+    heading: string;
+    anchor: string;
+    children?: Array<{ heading: string; anchor: string }>;
+  }>;
+  breadcrumbs?: Array<{ label: string; href: string }>;
+  asides?: Array<{ id: string; content: string }>;
+}
+
+const {
+  title,
+  description,
+  date,
+  updated,
+  readingTime,
+  showSidePanel = false,
+  showComments = false,
+  showReactions = false,
+  showBreadcrumbs = true,
+  showDate = true,
+  sidePanel = [],
+  breadcrumbs = [],
+  asides = []
+} = Astro.props;
+
+function formatDate(d: Date): string {
+  return d.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+---
+
+<BaseLayout 
+  title={title} 
+  description={description}
+  article={true}
+  publishDate={date}
+  updatedDate={updated}
+>
+  <div class="article-layout">
+    {showSidePanel && sidePanel.length > 0 && (
+      <aside class="side-panel-container">
+        <SidePanel items={sidePanel} />
+      </aside>
+    )}
+    
+    <article class="article-content">
+      {showBreadcrumbs && breadcrumbs.length > 0 && (
+        <Breadcrumbs items={breadcrumbs} />
+      )}
+      
+      <header class="article-header">
+        <h1>{title}</h1>
+        {description && <p class="article-description">{description}</p>}
+        
+        <div class="article-meta">
+          {showDate && date && (
+            <time datetime={date.toISOString()}>{formatDate(date)}</time>
+          )}
+          {updated && updated.getTime() !== date?.getTime() && (
+            <span class="updated">Updated {formatDate(updated)}</span>
+          )}
+          {readingTime && (
+            <span class="reading-time">{readingTime} min read</span>
+          )}
+        </div>
+      </header>
+      
+      <div class="article-body prose">
+        <slot />
+      </div>
+      
+      {showReactions && (
+        <Reactions />
+      )}
+      
+      {showComments && (
+        <Comments />
+      )}
+    </article>
+    
+    {asides.length > 0 && (
+      <aside class="asides-container">
+        {asides.map(aside => (
+          <div class="aside" id={`aside-${aside.id}`}>
+            {aside.content}
+          </div>
+        ))}
+      </aside>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .article-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    max-width: var(--max-width-wide);
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+  }
+  
+  @media (min-width: 1024px) {
+    .article-layout {
+      grid-template-columns: 200px minmax(0, 1fr);
+    }
+  }
+  
+  @media (min-width: 1280px) {
+    .article-layout {
+      grid-template-columns: 200px minmax(0, 1fr) 200px;
+    }
+  }
+  
+  .side-panel-container {
+    display: none;
+  }
+  
+  @media (min-width: 1024px) {
+    .side-panel-container {
+      display: block;
+    }
+  }
+  
+  .asides-container {
+    display: none;
+  }
+  
+  @media (min-width: 1280px) {
+    .asides-container {
+      display: block;
+    }
+  }
+  
+  .article-content {
+    max-width: var(--max-width-content);
+  }
+  
+  .article-header {
+    margin-bottom: var(--space-xl);
+  }
+  
+  .article-header h1 {
+    margin-bottom: var(--space-sm);
+  }
+  
+  .article-description {
+    font-size: 1.125rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+  }
+  
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+  
+  .article-meta time,
+  .article-meta .updated,
+  .article-meta .reading-time {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+  
+  .article-meta .updated::before,
+  .article-meta .reading-time::before {
+    content: '•';
+    margin-right: var(--space-xs);
+  }
+  
+  .article-body {
+    line-height: 1.8;
+  }
+  
+  .article-body :global(h2) {
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-md);
+    padding-top: var(--space-md);
+  }
+  
+  .article-body :global(h3) {
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+  }
+  
+  .article-body :global(p) {
+    margin-bottom: var(--space-md);
+  }
+  
+  .article-body :global(ul),
+  .article-body :global(ol) {
+    margin-bottom: var(--space-md);
+    padding-left: var(--space-lg);
+  }
+  
+  .article-body :global(li) {
+    margin-bottom: var(--space-xs);
+  }
+  
+  .article-body :global(ul) {
+    list-style: disc;
+  }
+  
+  .article-body :global(ol) {
+    list-style: decimal;
+  }
+  
+  .aside {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    padding: var(--space-sm);
+    border-left: 2px solid var(--color-border);
+    margin-bottom: var(--space-md);
+  }
+</style>
