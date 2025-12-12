@@ -8,7 +8,6 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
-  ogImage?: string;
   article?: boolean;
   publishDate?: Date;
   updatedDate?: Date;
@@ -18,13 +17,12 @@ const siteConfig = getSiteConfig();
 const { 
   title = siteConfig.site.title,
   description = siteConfig.site.description,
-  ogImage = siteConfig.seo.defaultOgImage,
   article = false,
   publishDate,
   updatedDate
 } = Astro.props;
 
-const pageTitle = title === siteConfig.site.title ? title : `${title} | ${siteConfig.site.title}`;
+const pageTitle = title === siteConfig.site.title ? title : `${title} — ${siteConfig.site.title}`;
 const canonicalUrl = new URL(Astro.url.pathname, siteConfig.site.url);
 ---
 
@@ -37,25 +35,11 @@ const canonicalUrl = new URL(Astro.url.pathname, siteConfig.site.url);
   <meta name="description" content={description}>
   <link rel="canonical" href={canonicalUrl}>
   
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
   <!-- Open Graph -->
   <meta property="og:title" content={title}>
   <meta property="og:description" content={description}>
-  <meta property="og:image" content={new URL(ogImage, siteConfig.site.url)}>
   <meta property="og:url" content={canonicalUrl}>
   <meta property="og:type" content={article ? 'article' : 'website'}>
-  <meta property="og:site_name" content={siteConfig.site.title}>
-  
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content={title}>
-  <meta name="twitter:description" content={description}>
-  <meta name="twitter:image" content={new URL(ogImage, siteConfig.site.url)}>
-  <meta name="twitter:site" content={siteConfig.seo.twitterHandle}>
   
   {article && publishDate && (
     <meta property="article:published_time" content={publishDate.toISOString()}>
@@ -63,16 +47,12 @@ const canonicalUrl = new URL(Astro.url.pathname, siteConfig.site.url);
   {article && updatedDate && (
     <meta property="article:modified_time" content={updatedDate.toISOString()}>
   )}
-  {article && (
-    <meta property="article:author" content={siteConfig.site.author}>
-  )}
   
   <ViewTransitions />
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
   <Nav />
-  <main id="main-content">
+  <main class="container">
     <slot />
   </main>
   <Footer />
@@ -80,24 +60,7 @@ const canonicalUrl = new URL(Astro.url.pathname, siteConfig.site.url);
 </html>
 
 <style>
-  .skip-link {
-    position: absolute;
-    top: -40px;
-    left: 0;
-    background: var(--color-accent);
-    color: white;
-    padding: var(--space-sm) var(--space-md);
-    z-index: 100;
-    transition: top var(--transition-fast);
-  }
-  
-  .skip-link:focus {
-    top: 0;
-  }
-  
   main {
-    min-height: calc(100vh - 200px);
-    padding-top: var(--space-lg);
-    padding-bottom: var(--space-2xl);
+    min-height: 60vh;
   }
 </style>
