@@ -1,0 +1,46 @@
+---
+import { getSiteConfig } from '../../lib/sections';
+
+const siteConfig = getSiteConfig();
+const { repo, repoId, category, categoryId } = siteConfig.comments;
+---
+
+<section class="comments" id="comments">
+  <h2 class="comments-title">Comments</h2>
+  <div class="giscus-container">
+    <script
+      src="https://giscus.app/client.js"
+      data-repo={repo}
+      data-repo-id={repoId}
+      data-category={category}
+      data-category-id={categoryId}
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="en"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </div>
+</section>
+
+<style>
+  .comments {
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--color-border);
+  }
+  
+  .comments-title {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-lg);
+  }
+  
+  .giscus-container {
+    min-height: 200px;
+  }
+</style>
