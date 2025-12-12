@@ -1,0 +1,41 @@
+- name: "Sarah Chen"
+  title: "Senior Frontend Engineer at TechCorp"
+  description: "Exceptional React developer with a keen eye for UX. Transformed our component library and mentored junior developers."
+  links:
+    - type: "linkedin"
+      url: "https://linkedin.com/in/sarahchen"
+    - type: "github"
+      url: "https://github.com/sarahchen"
+    - type: "website"
+      url: "https://sarahchen.dev"
+  order: 1
+
+- name: "Marcus Johnson"
+  title: "DevOps Lead at CloudScale"
+  description: "Kubernetes wizard who reduced our deployment times by 80%. Always finds the elegant solution to complex infrastructure problems."
+  links:
+    - type: "linkedin"
+      url: "https://linkedin.com/in/marcusj"
+    - type: "github"
+      url: "https://github.com/marcusj"
+  order: 2
+
+- name: "Elena Rodriguez"
+  title: "Product Designer at DesignStudio"
+  description: "Created our entire design system from scratch. Her attention to accessibility and micro-interactions is unmatched."
+  links:
+    - type: "linkedin"
+      url: "https://linkedin.com/in/elenarodriguez"
+    - type: "website"
+      url: "https://elena.design"
+  order: 3
+
+- name: "David Kim"
+  title: "Backend Engineer at DataFlow"
+  description: "Built our real-time data pipeline that handles millions of events daily. Expert in distributed systems and Rust."
+  links:
+    - type: "linkedin"
+      url: "https://linkedin.com/in/davidkim"
+    - type: "github"
+      url: "https://github.com/davidkim"
+  order: 4

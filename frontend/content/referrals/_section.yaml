@@ -1,0 +1,24 @@
+name: "People I've Worked With"
+slug: "referrals"
+description: "Talented professionals I recommend and have had the pleasure of collaborating with"
+showInNav: true
+navOrder: 3
+navLabel: "People"
+
+layout:
+  index: "grid"
+  content: null
+
+structure:
+  hasTopics: false
+  sortBy: "order"
+
+features:
+  comments: false
+  reactions: false
+  sidePanel: false
+
+components:
+  card: "ProfileCard"
+
+dataFile: "people.yaml"

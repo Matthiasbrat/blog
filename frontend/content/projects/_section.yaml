@@ -1,0 +1,19 @@
+name: "Projects"
+slug: "projects"
+description: "Things I've built and contributed to"
+showInNav: true
+navOrder: 4
+
+layout:
+  index: "grid"
+  content: "article"
+
+structure:
+  hasTopics: false
+  sortBy: "order"
+
+features:
+  comments: false
+  reactions: true
+  sidePanel: false
+  showDate: false
