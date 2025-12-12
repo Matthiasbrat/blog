@@ -3,139 +3,111 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Search">
-  <div class="search-page">
-    <h1>Search</h1>
-    <div class="search-container">
-      <input 
-        type="search" 
-        id="search-input" 
-        placeholder="Search posts and documentation..."
-        autofocus
-      />
-    </div>
-    <div id="search-results" class="search-results">
-      <p class="search-hint">Start typing to search...</p>
-    </div>
+  <h1>Search</h1>
+  <div class="search-box">
+    <input type="search" id="search-input" placeholder="Search..." autofocus />
   </div>
+  <div id="search-results"></div>
 </BaseLayout>
 
 <style>
-  .search-page {
-    max-width: var(--max-width-content);
-    margin: 0 auto;
-    padding: var(--space-xl) var(--space-md);
-  }
-  
   h1 {
     margin-bottom: var(--space-lg);
   }
   
-  .search-container {
+  .search-box {
     margin-bottom: var(--space-xl);
   }
   
   #search-input {
     width: 100%;
-    padding: var(--space-md);
-    font-size: 1.125rem;
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background: var(--color-bg-alt);
-    color: var(--color-text);
-    transition: border-color var(--transition-fast);
+    padding: var(--space-sm);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
   }
   
   #search-input:focus {
     outline: none;
-    border-color: var(--color-accent);
+    border-color: var(--color-text);
   }
   
-  #search-input::placeholder {
-    color: var(--color-text-muted);
-  }
-  
-  .search-results {
-    min-height: 200px;
-  }
-  
-  .search-hint {
-    color: var(--color-text-muted);
-    text-align: center;
-    padding: var(--space-xl);
-  }
-  
-  .search-results :global(.result-item) {
-    padding: var(--space-md);
+  #search-results :global(.result) {
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-md);
     border-bottom: 1px solid var(--color-border);
   }
   
-  .search-results :global(.result-item:last-child) {
+  #search-results :global(.result:last-child) {
     border-bottom: none;
   }
   
-  .search-results :global(.result-title) {
-    font-weight: 500;
-    margin-bottom: var(--space-xs);
+  #search-results :global(.result a) {
+    font-weight: normal;
   }
   
-  .search-results :global(.result-excerpt) {
-    font-size: 0.875rem;
+  #search-results :global(.excerpt) {
+    font-size: 0.9375rem;
     color: var(--color-text-muted);
+    margin-top: var(--space-xs);
   }
   
-  .search-results :global(.result-excerpt mark) {
-    background: rgba(37, 99, 235, 0.2);
-    color: var(--color-text);
+  #search-results :global(mark) {
+    background: #ff0;
+    color: inherit;
   }
 </style>
 
 <script>
-  // Simple client-side search
-  // In production, this would use Pagefind
   const searchInput = document.getElementById('search-input') as HTMLInputElement;
   const resultsContainer = document.getElementById('search-results');
   
-  // Simulated search data - in production loaded from Pagefind index
   const searchData = [
-    { title: 'Async/Await in JavaScript', url: '/blog/javascript/async-await', excerpt: 'Learn how to use async/await for cleaner asynchronous code' },
-    { title: 'Understanding Ownership', url: '/blog/rust/ownership', excerpt: 'Deep dive into Rust\'s ownership system' },
-    { title: 'Installation Guide', url: '/docs/getting-started/installation', excerpt: 'Get started with the installation process' },
-    { title: 'Quick Start', url: '/docs/getting-started/quick-start', excerpt: 'Build your first project in minutes' }
+    { title: 'Mastering Async/Await', url: '/blog/javascript/async-await', excerpt: 'A comprehensive guide to writing cleaner asynchronous code' },
+    { title: 'Understanding Closures', url: '/blog/javascript/closures', excerpt: 'A practical guide to closures and their everyday use cases' },
+    { title: 'ES6 Modules Explained', url: '/blog/javascript/es6-modules', excerpt: 'Understanding import and export in modern JavaScript' },
+    { title: 'Promises: A Deep Dive', url: '/blog/javascript/promises-deep-dive', excerpt: 'Everything you need to know about JavaScript Promises' },
+    { title: 'Understanding Ownership', url: '/blog/rust/ownership', excerpt: 'Deep dive into Rust ownership system' },
+    { title: 'Demystifying Lifetimes', url: '/blog/rust/lifetimes', excerpt: 'A clear explanation of Rust lifetime system' },
+    { title: 'Error Handling in Rust', url: '/blog/rust/error-handling', excerpt: 'Mastering Result, Option, and the ? operator' },
+    { title: 'Advanced Generics', url: '/blog/typescript/generics', excerpt: 'Master TypeScript powerful generic type system' },
+    { title: 'Utility Types', url: '/blog/typescript/utility-types', excerpt: 'Quick reference for TypeScript built-in utility types' },
+    { title: 'Installation Guide', url: '/docs/getting-started/installation', excerpt: 'Step-by-step instructions to install and set up' },
+    { title: 'Quick Start', url: '/docs/getting-started/quick-start', excerpt: 'Build your first project in under 5 minutes' },
   ];
   
-  let debounceTimer: number;
+  let timer: number;
   
   searchInput?.addEventListener('input', (e) => {
-    clearTimeout(debounceTimer);
-    debounceTimer = window.setTimeout(() => {
-      const query = (e.target as HTMLInputElement).value.toLowerCase().trim();
+    clearTimeout(timer);
+    timer = window.setTimeout(() => {
+      const q = (e.target as HTMLInputElement).value.toLowerCase().trim();
       
-      if (!query) {
-        resultsContainer!.innerHTML = '<p class="search-hint">Start typing to search...</p>';
+      if (!q) {
+        resultsContainer!.innerHTML = '';
         return;
       }
       
       const results = searchData.filter(item => 
-        item.title.toLowerCase().includes(query) || 
-        item.excerpt.toLowerCase().includes(query)
+        item.title.toLowerCase().includes(q) || item.excerpt.toLowerCase().includes(q)
       );
       
       if (results.length === 0) {
-        resultsContainer!.innerHTML = '<p class="search-hint">No results found.</p>';
+        resultsContainer!.innerHTML = '<p>No results found.</p>';
         return;
       }
       
-      resultsContainer!.innerHTML = results.map(result => `
-        <a href="${result.url}" class="result-item" style="display: block; text-decoration: none; color: inherit;">
-          <div class="result-title">${highlightMatch(result.title, query)}</div>
-          <div class="result-excerpt">${highlightMatch(result.excerpt, query)}</div>
-        </a>
+      resultsContainer!.innerHTML = results.map(r => `
+        <div class="result">
+          <a href="${r.url}">${highlight(r.title, q)}</a>
+          <p class="excerpt">${highlight(r.excerpt, q)}</p>
+        </div>
       `).join('');
-    }, 200);
+    }, 150);
   });
   
-  function highlightMatch(text: string, query: string): string {
-    const regex = new RegExp(`(${query})`, 'gi');
-    return text.replace(regex, '<mark>$1</mark>');
+  function highlight(text: string, query: string): string {
+    return text.replace(new RegExp(`(${query})`, 'gi'), '<mark>$1</mark>');
   }
 </script>
