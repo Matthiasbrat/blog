@@ -1,10 +1,10 @@
 ---
-import ArticleLayout from '../../../../layouts/ArticleLayout.astro';
-import { getSectionBySlug } from '../../../../lib/sections';
-import { getTopicBySlug, getContentForTopic, getContentBySlug } from '../../../../lib/content';
+import ArticleLayout from '../../../layouts/ArticleLayout.astro';
+import { getSectionBySlug } from '../../../lib/sections';
+import { getTopicBySlug, getContentForTopic, getContentBySlug } from '../../../lib/content';
 
 export async function getStaticPaths() {
-  const { getTopicsForSection, getContentForTopic } = await import('../../../../lib/content');
+  const { getTopicsForSection, getContentForTopic } = await import('../../../lib/content');
   const topics = getTopicsForSection('blog');
   
   const paths = [];
