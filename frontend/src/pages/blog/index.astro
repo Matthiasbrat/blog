@@ -1,46 +1,82 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import TopicCard from '../../components/TopicCard.astro';
 import { getSectionBySlug } from '../../lib/sections';
 import { getTopicsForSection, getContentForTopic } from '../../lib/content';
 
 const section = getSectionBySlug('blog');
 const topics = getTopicsForSection('blog');
+
+const topicIcons: Record<string, string> = {
+  javascript: '⚡',
+  typescript: '🔷',
+  rust: '🦀',
+};
+
+// Get all posts for featured section
+let allPosts: any[] = [];
+for (const topic of topics) {
+  const posts = getContentForTopic('blog', topic.slug);
+  allPosts = [...allPosts, ...posts.map(p => ({ ...p, topic: topic.slug, topicName: topic.name }))];
+}
+allPosts = allPosts.sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0)).slice(0, 4);
+
+function formatDate(d: Date): string {
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
 ---
 
 <BaseLayout title="Blog" description={section?.description}>
-  <header>
-    <h1>Blog</h1>
-    <p class="description">{section?.description}</p>
-  </header>
+  <section class="section">
+    <div class="container">
+      <div class="section-header" style="flex-direction: column; align-items: flex-start;">
+        <h1 class="section-title" style="font-size: clamp(2rem, 4vw, 2.75rem);">Blog</h1>
+        <p class="section-subtitle" style="max-width: 500px;">{section?.description}</p>
+      </div>
+    </div>
+  </section>
   
-  <section>
-    <h2>Topics</h2>
-    <ul class="topic-list">
-      {topics.map(topic => {
-        const posts = getContentForTopic('blog', topic.slug);
-        return (
-          <TopicCard
-            title={topic.name}
-            description={topic.description}
-            href={`/blog/${topic.slug}`}
-            count={posts.length}
-          />
-        );
-      })}
-    </ul>
+  <!-- Featured -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <h2 style="font-family: var(--font-body); font-weight: 600; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-tertiary); margin-bottom: var(--space-lg);">Latest Posts</h2>
+      
+      <ul class="cards-grid">
+        {allPosts.map(post => (
+          <li>
+            <a href={`/blog/${post.topic}/${post.slug}`} class="post-card">
+              <div class="post-card-date">{formatDate(post.date)}</div>
+              <h3>{post.title}</h3>
+              <p class="post-card-excerpt">{post.description}</p>
+              <span class="post-card-tag">{post.topicName}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+  
+  <!-- Topics -->
+  <section class="section" style="background: var(--bg-accent);">
+    <div class="container">
+      <h2 style="font-family: var(--font-body); font-weight: 600; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-tertiary); margin-bottom: var(--space-lg);">Browse by Topic</h2>
+      
+      <ul class="cards-grid">
+        {topics.map(topic => {
+          const posts = getContentForTopic('blog', topic.slug);
+          return (
+            <li>
+              <a href={`/blog/${topic.slug}`} class="topic-card">
+                <div class="topic-card-icon">{topicIcons[topic.slug] || '📝'}</div>
+                <h3>{topic.name}</h3>
+                <p class="topic-card-description">{topic.description}</p>
+                <div class="topic-card-meta">
+                  <span class="topic-card-count">{posts.length} articles</span>
+                </div>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   </section>
 </BaseLayout>
-
-<style>
-  .description {
-    font-size: 1.125rem;
-    color: var(--color-text-light);
-    margin-top: calc(var(--space-xl) * -1 + var(--space-md));
-    margin-bottom: var(--space-2xl);
-  }
-  
-  section h2 {
-    margin-top: 0;
-  }
-</style>
