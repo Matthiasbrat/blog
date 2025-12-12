@@ -11,26 +11,6 @@ const { title, description, href, count } = Astro.props;
 
 <li class="topic-item">
   <a href={href}>{title}</a>
-  {count !== undefined && <span class="count">({count})</span>}
-  {description && <span class="description"> — {description}</span>}
+  {count !== undefined && <span class="count">{count} posts</span>}
+  {description && <span class="description">{description}</span>}
 </li>
-
-<style>
-  .topic-item {
-    margin-bottom: var(--space-sm);
-  }
-  
-  a {
-    color: var(--color-text);
-  }
-  
-  .count {
-    font-family: var(--font-mono);
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-  }
-  
-  .description {
-    color: var(--color-text-muted);
-  }
-</style>
