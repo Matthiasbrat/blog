@@ -17,10 +17,12 @@ const people = getDataFile<Person>('referrals', 'people.yaml').sort((a, b) => (a
 ---
 
 <BaseLayout title="People" description={section?.description}>
-  <h1>People</h1>
-  <p class="description">{section?.description}</p>
+  <header>
+    <h1>People</h1>
+    <p class="description">{section?.description}</p>
+  </header>
   
-  <ul class="people">
+  <ul class="person-list">
     {people.map(person => (
       <ProfileCard
         name={person.name}
@@ -34,7 +36,9 @@ const people = getDataFile<Person>('referrals', 'people.yaml').sort((a, b) => (a
 
 <style>
   .description {
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-xl);
+    font-size: 1.125rem;
+    color: var(--color-text-light);
+    margin-top: calc(var(--space-xl) * -1 + var(--space-md));
+    margin-bottom: var(--space-2xl);
   }
 </style>
