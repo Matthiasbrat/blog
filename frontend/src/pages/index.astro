@@ -15,20 +15,19 @@ for (const topic of blogTopics) {
 }
 recentPosts = recentPosts
   .sort((a, b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0))
-  .slice(0, 10);
+  .slice(0, 8);
 ---
 
 <BaseLayout>
-  <section class="intro">
-    <h1>{siteConfig.site.title}</h1>
+  <header class="intro">
+    <h1>Welcome</h1>
     <p>
-      Welcome. I write about programming, share documentation, and connect with great people.
-      Browse the <a href="/blog">blog</a>, read the <a href="/docs">docs</a>, 
-      or see <a href="/referrals">people I recommend</a>.
+      I'm {siteConfig.site.author}. I write about programming, share documentation, 
+      and connect with great people. Browse around.
     </p>
-  </section>
+  </header>
   
-  <section class="recent">
+  <section>
     <h2>Recent Writing</h2>
     <ul class="post-list">
       {recentPosts.map(post => (
@@ -39,30 +38,28 @@ recentPosts = recentPosts
         />
       ))}
     </ul>
-    <p><a href="/blog">All posts →</a></p>
+    <p class="view-all"><a href="/blog">View all posts →</a></p>
   </section>
 </BaseLayout>
 
 <style>
   .intro {
-    margin-bottom: var(--space-xl);
-  }
-  
-  .intro h1 {
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-2xl);
   }
   
   .intro p {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
+    color: var(--color-text-light);
+    max-width: 55ch;
   }
   
-  .recent h2 {
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: var(--space-xs);
-    margin-bottom: var(--space-lg);
+  section h2 {
+    margin-top: 0;
   }
   
-  .post-list {
-    margin-bottom: var(--space-lg);
+  .view-all {
+    margin-top: var(--space-lg);
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
   }
 </style>
