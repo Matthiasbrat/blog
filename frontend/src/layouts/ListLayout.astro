@@ -4,25 +4,12 @@ import BaseLayout from './BaseLayout.astro';
 interface Props {
   title: string;
   description?: string;
+  article?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, article = false } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description}>
-  <header>
-    <h1>{title}</h1>
-    {description && <p class="page-description">{description}</p>}
-  </header>
-  
+<BaseLayout title={title} description={description} article={article}>
   <slot />
 </BaseLayout>
-
-<style>
-  .page-description {
-    font-size: 1.125rem;
-    color: var(--color-text-light);
-    margin-top: calc(var(--space-xl) * -1 + var(--space-md));
-    margin-bottom: var(--space-xl);
-  }
-</style>
