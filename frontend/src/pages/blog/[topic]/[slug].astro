@@ -1,5 +1,5 @@
 ---
-import ArticleLayout from '../../../layouts/ArticleLayout.astro';
+import BaseLayout from '../../../layouts/ArticleLayout.astro';
 import { getSectionBySlug } from '../../../lib/sections';
 import { getTopicBySlug, getContentForTopic, getContentBySlug } from '../../../lib/content';
 
@@ -11,17 +11,15 @@ export async function getStaticPaths() {
   for (const topic of topics) {
     const posts = getContentForTopic('blog', topic.slug);
     for (const post of posts) {
-      paths.push({
-        params: { topic: topic.slug, slug: post.slug }
-      });
+      paths.push({ params: { topic: topic.slug, slug: post.slug } });
     }
   }
-  
   return paths;
 }
 
 const { topic: topicSlug, slug } = Astro.params;
 const section = getSectionBySlug('blog');
+const topic = getTopicBySlug('blog', topicSlug!);
 const postData = getContentBySlug('blog', topicSlug!, slug!);
 
 if (!postData) {
@@ -30,13 +28,16 @@ if (!postData) {
 
 const { meta, content } = postData;
 
-// Simple markdown to HTML
+function formatDate(d: Date): string {
+  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
 function renderContent(md: string): string {
   return md
-    .replace(/^# .+$/m, '') // Remove h1
+    .replace(/^# .+$/m, '')
     .replace(/^## (.+)$/gm, (_, t) => `<h2 id="${t.toLowerCase().replace(/[^a-z0-9]+/g, '-')}">${t}</h2>`)
     .replace(/^### (.+)$/gm, (_, t) => `<h3>${t}</h3>`)
-    .replace(/```(\w+)?\n([\s\S]*?)```/g, (_, lang, code) => `<pre><code>${code.trim()}</code></pre>`)
+    .replace(/```(\w+)?\n([\s\S]*?)```/g, (_, lang, code) => `<pre><code>${code.trim().replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`)
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/\*([^*]+)\*/g, '<em>$1</em>')
@@ -49,28 +50,30 @@ function renderContent(md: string): string {
 }
 ---
 
-<ArticleLayout
-  title={meta.title}
-  description={meta.description}
-  date={meta.date}
-  updated={meta.updated}
-  showComments={section?.features?.comments ?? false}
-  showDate={true}
->
-  <Fragment set:html={renderContent(content)} />
-  
-  <p class="back"><a href={`/blog/${topicSlug}`}>← Back to {topicSlug}</a></p>
-</ArticleLayout>
-
-<style>
-  .back {
-    margin-top: var(--space-xl);
-    padding-top: var(--space-lg);
-    border-top: 1px solid var(--color-border);
-    font-size: 0.9375rem;
-  }
-  
-  .back a {
-    color: var(--color-text-muted);
-  }
-</style>
+<BaseLayout title={meta.title} description={meta.description} article={true}>
+  <article class="container">
+    <header class="article-header">
+      <div class="article-meta">
+        <a href={`/blog/${topicSlug}`} class="article-tag">{topic?.name}</a>
+        <span>·</span>
+        <time datetime={meta.date?.toISOString()}>{formatDate(meta.date)}</time>
+        <span>·</span>
+        <span>{meta.readingTime} min read</span>
+      </div>
+      <h1>{meta.title}</h1>
+      {meta.description && <p class="article-excerpt">{meta.description}</p>}
+    </header>
+    
+    <div class="content-container">
+      <div class="article-content content">
+        <Fragment set:html={renderContent(content)} />
+      </div>
+      
+      <div style="margin-top: var(--space-2xl); padding-top: var(--space-xl); border-top: 1px solid var(--border);">
+        <a href={`/blog/${topicSlug}`} class="btn btn-secondary">
+          ← More {topic?.name} articles
+        </a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
