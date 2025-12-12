@@ -1,28 +1,42 @@
 ---
-import GridLayout from '../../layouts/GridLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import TopicCard from '../../components/TopicCard.astro';
 import { getSectionBySlug } from '../../lib/sections';
 import { getTopicsForSection, getContentForTopic } from '../../lib/content';
 
 const section = getSectionBySlug('blog');
 const topics = getTopicsForSection('blog');
-
-if (!section) {
-  return Astro.redirect('/404');
-}
 ---
 
-<GridLayout title={section.name} description={section.description}>
-  {topics.map(topic => {
-    const posts = getContentForTopic('blog', topic.slug);
-    return (
-      <TopicCard
-        title={topic.name}
-        description={topic.description}
-        href={`/blog/${topic.slug}`}
-        banner={topic.banner}
-        meta={`${posts.length} posts`}
-      />
-    );
-  })}
-</GridLayout>
+<BaseLayout title="Blog" description={section?.description}>
+  <h1>Blog</h1>
+  <p class="description">{section?.description}</p>
+  
+  <h2>Topics</h2>
+  <ul class="topics">
+    {topics.map(topic => {
+      const posts = getContentForTopic('blog', topic.slug);
+      return (
+        <TopicCard
+          title={topic.name}
+          description={topic.description}
+          href={`/blog/${topic.slug}`}
+          count={posts.length}
+        />
+      );
+    })}
+  </ul>
+</BaseLayout>
+
+<style>
+  .description {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-xl);
+  }
+  
+  h2 {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-xs);
+    margin-bottom: var(--space-lg);
+  }
+</style>
