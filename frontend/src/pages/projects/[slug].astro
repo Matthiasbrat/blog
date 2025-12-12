@@ -1,10 +1,10 @@
 ---
-import ArticleLayout from '../../../layouts/ArticleLayout.astro';
-import { getSectionBySlug } from '../../../lib/sections';
-import { getFlatContent, getFlatContentBySlug } from '../../../lib/content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { getSectionBySlug } from '../../lib/sections';
+import { getFlatContent, getFlatContentBySlug } from '../../lib/content';
 
 export async function getStaticPaths() {
-  const { getFlatContent } = await import('../../../lib/content');
+  const { getFlatContent } = await import('../../lib/content');
   const projects = getFlatContent('projects');
   
   return projects.map(project => ({
