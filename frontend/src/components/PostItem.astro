@@ -9,9 +9,9 @@ const { title, href, date } = Astro.props;
 
 function formatDate(d: Date): string {
   return d.toLocaleDateString('en-US', {
-    year: 'numeric',
     month: 'short',
-    day: 'numeric'
+    day: 'numeric',
+    year: 'numeric'
   });
 }
 ---
@@ -20,36 +20,3 @@ function formatDate(d: Date): string {
   {date && <time datetime={date.toISOString()}>{formatDate(date)}</time>}
   <a href={href}>{title}</a>
 </li>
-
-<style>
-  .post-item {
-    display: flex;
-    gap: var(--space-md);
-    margin-bottom: var(--space-sm);
-    line-height: 1.4;
-  }
-  
-  time {
-    font-family: var(--font-mono);
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-    flex-shrink: 0;
-    width: 6rem;
-  }
-  
-  a {
-    color: var(--color-text);
-  }
-  
-  @media (max-width: 480px) {
-    .post-item {
-      flex-direction: column;
-      gap: 0;
-      margin-bottom: var(--space-md);
-    }
-    
-    time {
-      width: auto;
-    }
-  }
-</style>
