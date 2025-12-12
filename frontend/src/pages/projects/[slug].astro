@@ -1,0 +1,77 @@
+---
+import ArticleLayout from '../../../layouts/ArticleLayout.astro';
+import { getSectionBySlug } from '../../../lib/sections';
+import { getFlatContent, getFlatContentBySlug } from '../../../lib/content';
+
+export async function getStaticPaths() {
+  const { getFlatContent } = await import('../../../lib/content');
+  const projects = getFlatContent('projects');
+  
+  return projects.map(project => ({
+    params: { slug: project.slug }
+  }));
+}
+
+const { slug } = Astro.params;
+const section = getSectionBySlug('projects');
+const projectData = getFlatContentBySlug('projects', slug!);
+
+if (!projectData) {
+  return Astro.redirect('/404');
+}
+
+const { meta, content } = projectData;
+
+const breadcrumbs = [
+  { label: section?.name || 'Projects', href: '/projects' },
+  { label: meta.title, href: `/projects/${slug}` }
+];
+
+let sidePanel = meta.sidePanel || [];
+if (sidePanel.length === 0) {
+  const headingRegex = /^##\s+(.+)$/gm;
+  let match;
+  while ((match = headingRegex.exec(content)) !== null) {
+    const heading = match[1];
+    const anchor = '#' + heading.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    sidePanel.push({ heading, anchor });
+  }
+}
+---
+
+<ArticleLayout
+  title={meta.title}
+  description={meta.description}
+  showSidePanel={false}
+  showComments={false}
+  showReactions={section?.features?.reactions ?? true}
+  showBreadcrumbs={true}
+  showDate={false}
+  breadcrumbs={breadcrumbs}
+>
+  <Fragment set:html={content.replace(/^#.*$/m, '').trim().split('\n').map(line => {
+    if (line.startsWith('## ')) {
+      const text = line.slice(3);
+      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      return `<h2 id="${id}">${text}</h2>`;
+    }
+    if (line.startsWith('### ')) {
+      const text = line.slice(4);
+      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      return `<h3 id="${id}">${text}</h3>`;
+    }
+    if (line.startsWith('```')) {
+      return line;
+    }
+    if (line.trim() === '') {
+      return '';
+    }
+    if (line.startsWith('- ')) {
+      return `<li>${line.slice(2)}</li>`;
+    }
+    if (!line.startsWith('<') && !line.startsWith('*') && !line.match(/^\d+\./)) {
+      return `<p>${line}</p>`;
+    }
+    return line;
+  }).join('\n')} />
+</ArticleLayout>
